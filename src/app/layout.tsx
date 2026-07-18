@@ -5,11 +5,10 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
-const siteUrl = "https://wissem7155hack.github.io/Jeff";
-const siteBase = "https://wissem7155hack.github.io";
+const siteUrl = "https://nexcore-app.com";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteBase),
+  metadataBase: new URL(siteUrl),
   title: { default: "Nexcore — The Branded App for Aesthetic Practices", template: "%s — Nexcore" },
   description: "Nexcore brings mobile rewards, treatment ecommerce, memberships, patient engagement, financing, and practice insights into one branded app.",
   applicationName: "Nexcore",

@@ -4,7 +4,7 @@ import { blogPosts, industries, solutions } from "@/lib/site-data";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://wissem7155hack.github.io/Jeff";
+  const base = "https://nexcore-app.com";
   const now = new Date();
   const fixed = ["", "/product", "/about", "/contact", "/book-demo", "/resources/blog", "/resources/guides", "/privacy", "/terms"];
   return [
