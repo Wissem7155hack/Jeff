@@ -38,7 +38,7 @@ export default function HomePage() {
   return (
     <main id="main-content">
       <section className="home-hero">
-        <Image className="home-hero-image" src="https://images.pexels.com/photos/8313245/pexels-photo-8313245.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=1800" alt="A clinician caring for a patient in a modern treatment room" fill priority sizes="100vw" />
+        <Image className="home-hero-image" src="imgs/bg.png" alt="A clinician caring for a patient in a modern treatment room" fill priority sizes="100vw" />
         <div className="home-hero-overlay" />
         <div className="hero-noise" />
         <div className="home-hero-inner">
@@ -111,7 +111,7 @@ export default function HomePage() {
           <div className="step-cards">
             <article>
               <span className="step-number">01</span>
-                <div className="step-visual brand-builder"><div className="builder-toolbar"><i /><i /><i /></div><div className="builder-logo"><span className="brand-mark"><span /></span>Your Clinic&apos;s Name</div><div className="color-row"><i /><i /><i /><i /></div></div>
+              <div className="step-visual brand-builder"><div className="builder-toolbar"><i /><i /><i /></div><div className="builder-logo"><span className="brand-mark"><span /></span>Your Clinic&apos;s Name</div><div className="color-row"><i /><i /><i /><i /></div></div>
               <h3>Bring in your brand</h3><p>Add your logo, colors, treatment information, prices, memberships, locations, and clinic details.</p>
             </article>
             <article>
