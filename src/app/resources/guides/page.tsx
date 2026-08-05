@@ -1,18 +1,55 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BarChart3, Gift, Layers3, RefreshCcw, Rocket, ShoppingBag } from "lucide-react";
-import { blogPosts } from "@/lib/site-data";
+import { ArrowRight, BarChart3, Gift, RefreshCcw, ShoppingBag, Sparkles } from "lucide-react";
 
-export const metadata: Metadata = { title: "Practice Growth Guides", description: "Actionable Nexcore guides for launching a branded clinic app, building patient loyalty, selling treatments online, growing memberships, and reading performance.", alternates: { canonical: "/resources/guides" } };
+export const metadata: Metadata = { title: "Growth Guides", description: "Explore Nexcore growth guides for building loyalty programs, after-hours sales engines, membership frameworks, and patient engagement strategies.", alternates: { canonical: "/resources/guides" } };
 
 const guides = [
-  { title: "The branded app launch playbook", description: "Prepare your treatment catalog, rewards, team workflow, and first month of patient communication.", icon: Rocket, slug: "branded-clinic-app-launch", label: "Launch · 7 min" },
-  { title: "The patient loyalty playbook", description: "Choose useful actions, create clear milestones, and make reward progress visible.", icon: Gift, slug: "build-a-patient-loyalty-program", label: "Loyalty · 7 min" },
-  { title: "The mobile commerce playbook", description: "Structure treatment discovery, product details, checkout, and considerate follow-up.", icon: ShoppingBag, slug: "after-hours-treatment-sales", label: "Ecommerce · 6 min" },
-  { title: "The membership offer playbook", description: "Shape recurring value, communicate member pricing, and support the plan after signup.", icon: RefreshCcw, slug: "membership-offer-framework", label: "Memberships · 8 min" },
-  { title: "The weekly metrics playbook", description: "Connect app sales, loyalty activity, offer funnels, reviews, and referrals.", icon: BarChart3, slug: "clinic-dashboard-metrics", label: "Reporting · 6 min" },
+  { number: "01", icon: Gift, category: "Loyalty", title: "The complete loyalty program playbook", description: "Design a points, rewards, and engagement system patients actually use.", href: "/resources/blog/build-a-patient-loyalty-program" },
+  { number: "02", icon: ShoppingBag, category: "Ecommerce", title: "After-hours sales engine guide", description: "Capture treatment decisions patients make between 7 and 11 PM.", href: "/resources/blog/after-hours-treatment-sales" },
+  { number: "03", icon: RefreshCcw, category: "Memberships", title: "Membership framework for aesthetics", description: "Structure recurring value with treatment choice and member pricing.", href: "/resources/blog/membership-offer-framework" },
+  { number: "04", icon: Sparkles, category: "Engagement", title: "Gamification and scratch-card marketing", description: "Use interactive offers and voice messages to drive impulse purchases.", href: "/resources/blog/gamification-med-spa-marketing" },
 ];
 
 export default function GuidesPage() {
-  return <main id="main-content"><section className="guides-hero section-dark"><div className="section-container"><span className="eyebrow eyebrow-light"><Layers3 size={14} /> Nexcore growth guides</span><h1>Practical playbooks for a practice that stays connected.</h1><p>Step-by-step frameworks for the mobile patient journey—from preparing your app to reading what happens after launch.</p></div></section><section className="guide-list-section section-light"><div className="section-container"><div className="guide-list">{guides.map((guide, index) => { const Icon = guide.icon; return <article key={guide.slug}><span className="guide-number">0{index + 1}</span><div className="guide-icon"><Icon size={24} /></div><div><small>{guide.label}</small><h2>{guide.title}</h2><p>{guide.description}</p></div><Link href={`/resources/blog/${guide.slug}`} aria-label={`Read ${guide.title}`}><ArrowRight size={19} /></Link></article>; })}</div></div></section><section className="guide-principles section-soft"><div className="section-container"><div className="split-heading"><div><span className="eyebrow eyebrow-pink">A connected approach</span><h2>Every playbook supports the same patient journey.</h2></div><p>Help patients discover what is relevant, understand the value, act with confidence, and keep a clear reason to return.</p></div><div className="principle-grid"><div><span>01</span><h3>Be easy to find</h3><p>Keep your practice, treatment catalog, and useful information on the patient’s phone.</p></div><div><span>02</span><h3>Be easy to choose</h3><p>Organize by concern and explain treatment, package, and membership value clearly.</p></div><div><span>03</span><h3>Be worth returning to</h3><p>Use rewards, member benefits, relevant content, and a consistent branded experience.</p></div></div></div></section><section className="simple-cta section-pink"><div className="section-container"><span className="eyebrow eyebrow-light">From guide to growth</span><h2>See how these playbooks come together in Nexcore.</h2><p>Explore the branded patient app and owner dashboard in a tailored walkthrough.</p><Link className="button button-white" href="/book-demo">Book a demo <ArrowRight size={17} /></Link></div></section></main>;
+  return (
+    <main id="main-content">
+      <section className="guides-hero section-dark">
+        <div className="resource-orb" />
+        <div className="section-container">
+          <span className="eyebrow eyebrow-light">Growth guides</span>
+          <h1>Frameworks for sustainable practice growth.</h1>
+          <p>In-depth resources for designing loyalty, ecommerce, membership, and engagement experiences that drive patient retention and revenue.</p>
+        </div>
+      </section>
+
+      <section className="guide-list-section section-light">
+        <div className="section-container">
+          <div className="guide-list">
+            {guides.map((g) => { const GIcon = g.icon; return (
+              <article key={g.number}>
+                <span className="guide-number">{g.number}</span>
+                <div className="guide-icon"><GIcon size={22} /></div>
+                <div><small>{g.category}</small><h2>{g.title}</h2><p>{g.description}</p></div>
+                <Link href={g.href}><ArrowRight size={18} /></Link>
+              </article>
+            ); })}
+          </div>
+        </div>
+      </section>
+
+      <section className="guide-principles section-soft">
+        <div className="section-container">
+          <div className="center-heading"><span className="eyebrow eyebrow-pink">Our approach</span><h2>Every guide follows three principles.</h2></div>
+          <div className="principle-grid">
+            <div><span>01</span><h3>Practical first</h3><p>Every framework is designed to be implemented, not just understood. Clear steps and real examples throughout.</p></div>
+            <div><span>02</span><h3>Patient-centered</h3><p>Growth strategies work best when they improve the patient experience rather than interrupting it.</p></div>
+            <div><span>03</span><h3>Measurable outcomes</h3><p>Each guide connects actions to metrics so you can track impact and adjust your approach over time.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="simple-cta section-pink"><div className="section-container"><span className="eyebrow eyebrow-light">See it in action</span><h2>Watch these strategies come to life inside Nexcore.</h2><p>Book a tailored demo and explore the patient app and owner dashboard.</p><Link className="button button-white" href="/book-demo">Book your demo <ArrowRight size={17} /></Link></div></section>
+    </main>
+  );
 }

@@ -34,7 +34,6 @@ export default async function SolutionPage({ params }: Props) {
     { q: "Can the experience match our practice brand?", a: "Yes. Nexcore is designed around your practice identity, including your clinic name, logo, colors, treatments, locations, and patient-facing content." },
     { q: "Where can the practice see activity?", a: "Relevant activity appears in the owner dashboard alongside clients, mobile sales, rewards, reviews, referrals, visits, and recent events." },
   ];
-  const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((faq) => ({ "@type": "Question", name: faq.q, acceptedAnswer: { "@type": "Answer", text: faq.a } })) };
 
   return (
     <main id="main-content">
@@ -51,24 +50,12 @@ export default async function SolutionPage({ params }: Props) {
           </div>
           <div className="solution-phone">
             <div className="phone-halo" />
-            {slug === "ecommerce" && (
-              <ImagePhone src="/imgs/ECOM.jfif" alt="Ecommerce preview" />
-            )}
-            {slug === "mobile-rewards" && (
-              <ProtopiePhone src="https://cloud.protopie.io/p/bbc5dfec037a92153d1995ce?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Mobile Rewards Prototype" />
-            )}
-            {slug === "memberships" && (
-              <ProtopiePhone src="https://cloud.protopie.io/p/c130351e2ef62af898588c52?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Memberships Prototype" />
-            )}
-            {slug === "patient-engagement" && (
-              <ProtopiePhone src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Patient Engagement Prototype" />
-            )}
-            {slug === "patient-financing" && (
-              <ProtopiePhone src="https://cloud.protopie.io/p/0c14d0a046e20ee0e79234fb?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Patient Financing Prototype" />
-            )}
-            {slug === "business-intelligence" && (
-              <PhoneMockup visual={solution.visual} />
-            )}
+            {slug === "ecommerce" && <ImagePhone src="/imgs/ECOM.jfif" alt="Ecommerce preview" />}
+            {slug === "mobile-rewards" && <ProtopiePhone src="https://cloud.protopie.io/p/bbc5dfec037a92153d1995ce?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Mobile Rewards Prototype" />}
+            {slug === "memberships" && <ProtopiePhone src="https://cloud.protopie.io/p/c130351e2ef62af898588c52?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Memberships Prototype" />}
+            {slug === "patient-engagement" && <ProtopiePhone src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Patient Engagement Prototype" />}
+            {slug === "patient-financing" && <ProtopiePhone src="https://cloud.protopie.io/p/0c14d0a046e20ee0e79234fb?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Patient Financing Prototype" />}
+            {slug === "business-intelligence" && <PhoneMockup visual={solution.visual} />}
           </div>
         </div>
       </section>
@@ -112,7 +99,6 @@ export default async function SolutionPage({ params }: Props) {
       </section>
 
       <section className="simple-cta section-pink"><div className="section-container"><span className="eyebrow eyebrow-light">See it in your context</span><h2>Imagine {solution.eyebrow.toLowerCase()} under your practice brand.</h2><p>Book a tailored Nexcore walkthrough and explore the full patient and owner experience.</p><Link className="button button-white" href="/book-demo">Book your demo <ArrowRight size={17} /></Link></div></section>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </main>
   );
 }

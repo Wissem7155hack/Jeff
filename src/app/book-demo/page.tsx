@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { BarChart3, Check, Gift, RefreshCcw, ShoppingBag, Smartphone, Sparkles } from "lucide-react";
 import { LeadForm } from "@/components/lead-form";
 

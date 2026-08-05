@@ -38,7 +38,7 @@ export function LeadForm({ source = "demo" }: { source?: "demo" | "contact" }) {
         <span><CheckCircle2 size={28} /></span>
         <p className="eyebrow">Request received</p>
         <h2>{source === "contact" ? "Thanks for reaching out." : "Your Nexcore demo is one step closer."}</h2>
-        <p>We’ve received your details and will follow up using the email address you provided.</p>
+        <p>We&apos;ve received your details and will follow up using the email address you provided.</p>
         <button type="button" className="text-link" onClick={() => setState("idle")}>Send another message <span>↗</span></button>
       </div>
     );

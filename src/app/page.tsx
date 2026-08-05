@@ -4,12 +4,10 @@ import Link from "next/link";
 import {
   ArrowRight,
   BarChart3,
-  BellRing,
   Check,
   Clock3,
   Gift,
   HeartHandshake,
-  Layers3,
   RefreshCcw,
   ShoppingBag,
   Smartphone,
@@ -19,33 +17,24 @@ import { DashboardPreview, ProductShowcase } from "@/components/product-visuals"
 import { blogPosts, industryNav } from "@/lib/site-data";
 
 export const metadata: Metadata = {
-  title: "The Branded App for Aesthetic Practices",
-  description: "Nexcore helps aesthetic and wellness practices sell treatments, grow memberships, reward loyalty, and understand app performance from one branded mobile platform.",
+  title: "Med Spa Membership & Loyalty App | Branded Mobile App for Aesthetic Practices",
+  description: "The branded mobile app that helps med spas, laser clinics, and aesthetic skin clinics generate recurring revenue with memberships, rewards, and automated offers. 70% of sales happen after hours — capture them.",
   alternates: { canonical: "/" },
-};
-
-const softwareSchema = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Nexcore",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "iOS, Android, Web",
-  description: "A branded patient mobile app and owner dashboard for aesthetic and wellness practices.",
-  offers: { "@type": "Offer", availability: "https://schema.org/OnlineOnly" },
+  keywords: ["med spa membership app", "white label app for med spa", "laser clinic membership software", "aesthetic clinic mobile app", "med spa loyalty program software", "med spa rewards app", "branded mobile app for med spa", "clinic membership management software", "med spa recurring revenue software", "patient loyalty app"],
 };
 
 export default function HomePage() {
   return (
     <main id="main-content">
       <section className="home-hero">
-        <Image className="home-hero-image" src="imgs/bg.png" alt="A clinician caring for a patient in a modern treatment room" fill priority sizes="100vw" />
+        <Image className="home-hero-image" src="/imgs/bg.png" alt="A clinician caring for a patient in a modern treatment room" fill priority sizes="100vw" />
         <div className="home-hero-overlay" />
         <div className="hero-noise" />
         <div className="home-hero-inner">
           <div className="home-hero-copy reveal">
-            <span className="eyebrow eyebrow-light"><i /> Your practice, on every patient’s phone</span>
-            <h1>What if your practice could grow <em>while you sleep?</em></h1>
-            <p>Nexcore combines rewards, treatment shopping, memberships, patient engagement, and business insights inside your own branded mobile app.</p>
+            <span className="eyebrow eyebrow-light"><i /> Your practice, on every patient&apos;s phone</span>
+            <h1>The branded app that grows your practice while you sleep.</h1>
+            <p>Nexcore is the white-label mobile app for med spas, laser clinics, and aesthetic practices. Memberships, loyalty rewards, treatment shopping, automated offers, and business intelligence — all inside your own branded app. 70% of sales happen after hours. Capture them.</p>
             <div className="hero-actions">
               <Link className="button button-white" href="/book-demo">Book a demo <ArrowRight size={17} /></Link>
               <Link className="button button-ghost" href="/product">Explore the platform <span>↗</span></Link>
@@ -66,8 +55,6 @@ export default function HomePage() {
                 />
               </div>
             </div>
-            <div className="floating-proof proof-one"><span><ShoppingBag size={16} /></span><div><b>Treatment purchased</b><small>Order complete · just now</small></div><strong>+$280</strong></div>
-            <div className="floating-proof proof-two"><span><Gift size={16} /></span><div><b>Reward unlocked</b><small>Next visit benefit</small></div></div>
           </div>
         </div>
         <div className="hero-scroll"><span>Discover Nexcore</span><i /></div>
@@ -148,7 +135,7 @@ export default function HomePage() {
         <div className="section-container">
           <div className="center-heading narrow">
             <span className="eyebrow eyebrow-pink"><HeartHandshake size={14} /> The patient journey</span>
-            <h2>From “I’m considering it” to “I’ll be back.”</h2>
+            <h2>From &ldquo;I&apos;m considering it&rdquo; to &ldquo;I&apos;ll be back.&rdquo;</h2>
             <p>Every touchpoint is designed to make your practice easier to discover, choose, and return to.</p>
           </div>
           <div className="journey-grid">
@@ -191,13 +178,49 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="faq-section section-light" id="faq">
+        <div className="section-container faq-grid">
+          <div>
+            <span className="eyebrow eyebrow-pink">Frequently asked questions</span>
+            <h2>Everything clinic owners ask before choosing Nexcore.</h2>
+            <p>Get answers to common questions about med spa apps, membership software, and loyalty programs for aesthetic practices.</p>
+            <Link className="button button-dark" href="/book-demo">Book a demo <ArrowRight size={16} /></Link>
+          </div>
+          <div className="faq-list">
+            <details><summary>What is a med spa membership app?<span>+</span></summary><p>A med spa membership app is a branded mobile application that lets aesthetic practices sell recurring memberships, manage loyalty rewards, process treatment purchases, and engage patients — all from their own white-label app. Nexcore provides this as a complete platform with both a patient-facing app and an owner dashboard.</p></details>
+            <details><summary>How does Nexcore differ from generic booking software?<span>+</span></summary><p>Unlike scheduling tools, Nexcore is a branded mobile experience your patients download and use daily. It includes treatment ecommerce, points and rewards, membership management, scratch-card offers with voice messages, abandoned cart recovery, buy-now-pay-later, and a full analytics dashboard. It is a growth engine, not just a calendar.</p></details>
+            <details><summary>Does Nexcore work for laser clinics and skin rejuvenation centers?<span>+</span></summary><p>Yes. Nexcore supports laser clinics, aesthetic skin clinics, skin rejuvenation centers, med spas, cosmetic dermatology practices, plastic surgery practices, and wellness clinics. The platform adapts to any practice that offers treatment packages, memberships, or loyalty programs.</p></details>
+            <details><summary>How much revenue can a med spa app generate?<span>+</span></summary><p>Nexcore data shows that 70% of in-app purchases happen outside clinic hours, members spend 44% more annually than non-members, and a single automated scratch-card campaign generated $5,000+ in 24 hours from 340 notifications. Results vary, but the after-hours revenue alone typically covers the platform cost.</p></details>
+            <details><summary>Is the app branded to my practice?<span>+</span></summary><p>Completely. Nexcore is a white-label platform — your logo, your colors, your treatments, your brand. Patients see your practice name, not Nexcore. It appears in the app store under your identity.</p></details>
+          </div>
+        </div>
+      </section>
+
       <section className="final-cta">
         <Image src="https://images.pexels.com/photos/7750104/pexels-photo-7750104.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=1800" alt="Bright contemporary aesthetic practice interior" fill sizes="100vw" />
         <div className="final-cta-overlay" />
         <div className="final-cta-content"><span className="eyebrow eyebrow-light">Your next growth channel</span><h2>Make your practice available every hour of the day.</h2><p>See how Nexcore can bring your mobile storefront, rewards, memberships, engagement, and app performance together.</p><Link className="button button-white" href="/book-demo">Book your demo <ArrowRight size={17} /></Link></div>
       </section>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org", "@type": "FAQPage",
+          mainEntity: [
+            { "@type": "Question", name: "What is a med spa membership app?", acceptedAnswer: { "@type": "Answer", text: "A med spa membership app is a branded mobile application that lets aesthetic practices sell recurring memberships, manage loyalty rewards, process treatment purchases, and engage patients from their own white-label app." } },
+            { "@type": "Question", name: "Does Nexcore work for laser clinics?", acceptedAnswer: { "@type": "Answer", text: "Yes. Nexcore supports laser clinics, aesthetic skin clinics, skin rejuvenation centers, med spas, cosmetic dermatology, plastic surgery, and wellness clinics." } },
+            { "@type": "Question", name: "How much revenue can a med spa app generate?", acceptedAnswer: { "@type": "Answer", text: "Nexcore data shows 70% of in-app purchases happen outside clinic hours, members spend 44% more annually, and automated campaigns can generate $5,000+ in 24 hours." } },
+            { "@type": "Question", name: "Is the app branded to my practice?", acceptedAnswer: { "@type": "Answer", text: "Completely. Nexcore is a white-label platform — your logo, colors, treatments, and brand. Patients see your practice name, not Nexcore." } },
+          ]
+        })
+      }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org", "@type": "SoftwareApplication",
+          name: "Nexcore", applicationCategory: "BusinessApplication", operatingSystem: "iOS, Android, Web",
+          description: "A branded patient mobile app and owner dashboard for med spas, laser clinics, aesthetic skin clinics, and wellness practices. Features include treatment ecommerce, loyalty rewards, membership management, automated offers, and business intelligence.",
+          offers: { "@type": "Offer", availability: "https://schema.org/OnlineOnly" },
+        })
+      }} />
     </main>
   );
 }

@@ -1,44 +1,99 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ArrowRight, Check, ChevronRight, Gift, RefreshCcw, ShoppingBag, Smartphone } from "lucide-react";
-import { industries, industryNav } from "@/lib/site-data";
+import { ArrowRight, Check, ChevronRight, Sparkles } from "lucide-react";
+import { ProtopiePhone } from "@/components/product-visuals";
+import { industries, industryNav, solutionNav } from "@/lib/site-data";
 
-export function generateStaticParams() { return Object.keys(industries).map((slug) => ({ slug })); }
 type Props = { params: Promise<{ slug: string }> };
+
+export function generateStaticParams() {
+  return Object.keys(industries).map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const page = industries[slug];
-  if (!page) return {};
-  return { title: page.eyebrow, description: page.description, alternates: { canonical: `/who-we-serve/${slug}` }, openGraph: { title: `${page.eyebrow} | Nexcore`, description: page.description, images: [{ url: page.image, alt: page.imageAlt }] } };
+  const industry = industries[slug];
+  if (!industry) return {};
+  return { title: `Nexcore for ${industry.title}`, description: industry.heroDescription, alternates: { canonical: `/who-we-serve/${slug}` } };
 }
 
 export default async function IndustryPage({ params }: Props) {
   const { slug } = await params;
-  const page = industries[slug];
-  if (!page) notFound();
-  const others = industryNav.filter((item) => !item.href.endsWith(slug));
+  const industry = industries[slug];
+  if (!industry) {
+    const { notFound } = await import("next/navigation");
+    notFound();
+  }
+  const otherIndustries = industryNav.filter((i) => i.href !== `/who-we-serve/${slug}`);
 
   return (
     <main id="main-content">
       <section className="industry-hero section-light">
         <div className="section-container industry-hero-grid">
-          <div className="industry-hero-copy"><div className="breadcrumbs breadcrumbs-dark"><Link href="/">Home</Link><ChevronRight size={13} /><span>Who we serve</span><ChevronRight size={13} /><span>{page.eyebrow.replace("For ", "")}</span></div><span className="eyebrow eyebrow-pink">{page.eyebrow}</span><h1>{page.title}</h1><p>{page.description}</p><div className="hero-actions"><Link className="button button-pink" href="/book-demo">Book a tailored demo <ArrowRight size={17} /></Link><Link className="button button-outline-dark" href="/product">Explore the platform <span>↗</span></Link></div></div>
-          <div className="industry-hero-image"><Image src={page.image} alt={page.imageAlt} fill priority sizes="(max-width: 900px) 100vw, 48vw" /><div className="industry-image-note"><span><Smartphone size={18} /></span><div><strong>Your brand, on mobile</strong><small>Built around the patient journey</small></div></div></div>
+          <div className="industry-hero-copy">
+            <div className="breadcrumbs breadcrumbs-dark"><Link href="/">Home</Link><ChevronRight size={13} /><span>{industry.title}</span></div>
+            <span className="eyebrow eyebrow-pink"><Sparkles size={14} /> {industry.title}</span>
+            <h1>{industry.heroTitle}</h1>
+            <p>{industry.heroDescription}</p>
+            <div className="hero-actions"><Link className="button button-pink" href="/book-demo">Book a demo <ArrowRight size={17} /></Link><Link className="button button-outline-dark" href="/product">Explore the platform <span>↗</span></Link></div>
+          </div>
+          <div className="industry-hero-image">
+            <Image src={industry.image} alt={industry.imageAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
+            <div className="industry-image-note"><span><Sparkles size={18} /></span><div><strong>{industry.imageNote}</strong><small>Nexcore platform</small></div></div>
+          </div>
         </div>
       </section>
 
-      <section className="practice-challenges section-dark"><div className="section-container"><div className="split-heading"><div><span className="eyebrow eyebrow-light">The opportunity</span><h2>Move beyond the limits of the front desk.</h2></div><p>Patients keep thinking about their care after they leave. Nexcore gives your practice a helpful, branded place to meet that interest.</p></div><div className="challenge-grid">{page.challenges.map((challenge, index) => <div key={challenge}><span>0{index + 1}</span><p>{challenge}</p></div>)}</div></div></section>
+      <section className="practice-challenges section-dark">
+        <div className="section-container">
+          <div className="center-heading"><span className="eyebrow eyebrow-light">Common challenges</span><h2>Sound familiar?</h2></div>
+          <div className="challenge-grid">
+            {industry.challenges.map((c) => <div key={c.label}><span>{c.label}</span><p>{c.text}</p></div>)}
+          </div>
+        </div>
+      </section>
 
-      <section className="industry-outcomes section-light"><div className="section-container"><div className="center-heading narrow"><span className="eyebrow eyebrow-pink">Designed around your workflow</span><h2>A clearer path to patient value.</h2><p>Bring ongoing patient engagement and day-to-day practice visibility into one connected experience.</p></div><div className="industry-outcome-grid">{page.outcomes.map((outcome) => { const Icon = outcome.icon; return <article key={outcome.title}><span><Icon size={23} /></span><h3>{outcome.title}</h3><p>{outcome.body}</p></article>; })}</div></div></section>
+      <section className="industry-outcomes section-light">
+        <div className="section-container">
+          <div className="center-heading narrow"><span className="eyebrow eyebrow-pink">What changes with Nexcore</span><h2>Built for how {industry.title.toLowerCase()} actually grow.</h2></div>
+          <div className="industry-outcome-grid">
+            {industry.outcomes.map((o) => { const OIcon = o.icon; return <article key={o.title}><span><OIcon size={22} /></span><h3>{o.title}</h3><p>{o.description}</p></article>; })}
+          </div>
+        </div>
+      </section>
 
-      <section className="industry-platform section-soft"><div className="section-container industry-platform-grid"><div className="industry-platform-copy"><span className="eyebrow eyebrow-pink">What comes together</span><h2>The mobile growth essentials, in one place.</h2><p>Nexcore keeps the patient experience simple while giving your team a unified way to publish, sell, engage, and measure.</p><ul><li><Check size={16} /> A mobile app branded to your practice</li><li><Check size={16} /> Treatment and package ecommerce</li><li><Check size={16} /> Points, rewards, referrals, and reviews</li><li><Check size={16} /> Recurring memberships and member pricing</li><li><Check size={16} /> Push notifications and app content</li><li><Check size={16} /> Owner dashboard and offer reporting</li></ul><Link href="/product" className="text-link">See the complete platform <span>↗</span></Link></div><div className="industry-stack"><article><ShoppingBag size={22} /><span><small>Mobile commerce</small><strong>Keep treatments available 24/7</strong></span></article><article><RefreshCcw size={22} /><span><small>Memberships</small><strong>Make recurring value visible</strong></span></article><article><Gift size={22} /><span><small>Rewards</small><strong>Give patients a reason to return</strong></span></article><div className="industry-stack-glow" /></div></div></section>
+      <section className="industry-platform section-soft">
+        <div className="section-container industry-platform-grid">
+          <div className="industry-platform-copy">
+            <span className="eyebrow eyebrow-pink">The Nexcore platform</span>
+            <h2>Everything your practice needs in one app.</h2>
+            <p>From treatment shopping and loyalty rewards to memberships and business intelligence — Nexcore brings it all together.</p>
+            <ul>
+              <li><Check size={16} /> Branded patient mobile app</li>
+              <li><Check size={16} /> Owner dashboard with live activity</li>
+              <li><Check size={16} /> Treatment ecommerce with mobile checkout</li>
+              <li><Check size={16} /> Points, rewards, and referral tracking</li>
+            </ul>
+            <Link className="text-link" href="/product">Explore the full platform <span>↗</span></Link>
+          </div>
+          <div className="industry-stack">
+            <div className="industry-stack-glow" />
+            {solutionNav.slice(0, 4).map((s) => { const SIcon = s.icon; return <article key={s.href}><SIcon size={20} /><div><small>Nexcore</small><strong>{s.title}</strong></div></article>; })}
+          </div>
+        </div>
+      </section>
 
-      <section className="other-industries section-light"><div className="section-container"><div className="split-heading align-end"><div><span className="eyebrow eyebrow-pink">Explore more</span><h2>Nexcore across modern care.</h2></div></div><div className="other-industry-links">{others.map((item) => <Link href={item.href} key={item.href}><span>{item.title}</span><ArrowRight size={18} /></Link>)}</div></div></section>
+      <section className="other-industries section-light">
+        <div className="section-container">
+          <div className="center-heading"><span className="eyebrow eyebrow-pink">Also built for</span><h2>Explore Nexcore for other practice types.</h2></div>
+          <div className="other-industry-links">
+            {otherIndustries.map((o) => <Link href={o.href} key={o.href}>{o.title}<ArrowRight size={18} /></Link>)}
+          </div>
+        </div>
+      </section>
 
-      <section className="simple-cta section-pink"><div className="section-container"><span className="eyebrow eyebrow-light">Built for your practice</span><h2>See Nexcore through the lens of {page.eyebrow.replace("For ", "").toLowerCase()}.</h2><p>Book a tailored walkthrough of the branded app, owner dashboard, and growth experiences.</p><Link className="button button-white" href="/book-demo">Book your demo <ArrowRight size={17} /></Link></div></section>
+      <section className="simple-cta section-pink"><div className="section-container"><span className="eyebrow eyebrow-light">See it for your practice</span><h2>Explore what Nexcore looks like for {industry.title.toLowerCase()}.</h2><p>Book a tailored walkthrough focused on the growth priorities of your {industry.title.toLowerCase()} practice.</p><Link className="button button-white" href="/book-demo">Book your demo <ArrowRight size={17} /></Link></div></section>
     </main>
   );
 }

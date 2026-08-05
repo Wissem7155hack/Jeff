@@ -59,7 +59,7 @@ export default function ProductPage() {
         <div className="section-container"><div className="center-heading narrow"><span className="eyebrow eyebrow-pink">Explore every capability</span><h2>Build the Nexcore experience around your growth priorities.</h2></div><div className="solution-directory-grid">{solutionNav.map((item, index) => { const Icon = item.icon; return <Link href={item.href} key={item.href}><span className="feature-index">0{index + 1}</span><Icon size={23} /><h3>{item.title}</h3><p>{item.blurb}</p><b>Explore <i>↗</i></b></Link>; })}</div></div>
       </section>
 
-      <section className="simple-cta section-pink"><div className="section-container"><span className="eyebrow eyebrow-light">A closer look</span><h2>See the patient app and dashboard working together.</h2><p>We’ll walk through the full Nexcore journey and focus the demo on the priorities of your practice.</p><Link className="button button-white" href="/book-demo">Book your demo <ArrowRight size={17} /></Link></div></section>
+      <section className="simple-cta section-pink"><div className="section-container"><span className="eyebrow eyebrow-light">A closer look</span><h2>See the patient app and dashboard working together.</h2><p>We&apos;ll walk through the full Nexcore journey and focus the demo on the priorities of your practice.</p><Link className="button button-white" href="/book-demo">Book your demo <ArrowRight size={17} /></Link></div></section>
     </main>
   );
 }

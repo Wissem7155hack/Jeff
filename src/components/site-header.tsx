@@ -38,7 +38,7 @@ export function SiteHeader() {
         <div className="header-shell">
           <Brand />
           <nav className="desktop-nav" aria-label="Primary navigation">
-            <Link className={pathname === "/product" ? "active" : ""} href="/product">Product</Link>
+            <Link className={pathname === "/product" || pathname === "/product/" ? "active" : ""} href="/product">Product</Link>
             <div className="nav-dropdown">
               <button className={pathname.startsWith("/solutions") ? "active" : ""} type="button" aria-haspopup="true">
                 Solutions <ChevronDown size={14} />
@@ -78,7 +78,7 @@ export function SiteHeader() {
                 <Link href="/product#how-it-works">How it works <span>↗</span></Link>
               </div>
             </div>
-            <Link className={pathname === "/about" ? "active" : ""} href="/about">Company</Link>
+            <Link className={pathname === "/about" || pathname === "/about/" ? "active" : ""} href="/about">Company</Link>
           </nav>
           <div className="header-actions">
             <a className="login-link" href="https://login.nexcore-app.com/">Log in</a>
