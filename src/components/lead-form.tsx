@@ -57,7 +57,7 @@ export function LeadForm({ source = "demo" }: { source?: "demo" | "contact" }) {
         <label><span>Phone number</span><input name="phone" type="tel" autoComplete="tel" placeholder="(555) 000-0000" /></label>
         <label><span>Practice name {source === "demo" ? "*" : ""}</span><input name="practiceName" type="text" required={source === "demo"} autoComplete="organization" placeholder="Your practice" /></label>
       </div>
-      <label><span>Website / Instagram *</span><input name="website" type="url" required autoComplete="url" placeholder="https://yourpractice.com or @instagram" /></label>
+      <label><span>Website</span><input name="website" type="url" required autoComplete="url" placeholder="https://yourpractice.com" /></label>
       <label>
         <span>Practice type</span>
         <select name="practiceType" defaultValue="">
