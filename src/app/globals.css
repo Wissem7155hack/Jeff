@@ -2246,10 +2246,10 @@ img {
   align-items: center;
   gap: 30px;
   animation: marquee 28s linear infinite;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Manrope Variable", "Manrope", sans-serif;
   font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .08em;
+  font-weight: 700;
+  letter-spacing: .12em;
   text-transform: uppercase;
 }
 
@@ -5360,37 +5360,11 @@ img {
 }
 
 .hero-phone-wrap .phone-device {
-  animation: heroPhoneFloat 6s ease-in-out infinite;
-}
-
-@keyframes heroPhoneFloat {
-
-  0%,
-  100% {
-    transform: rotate(3deg) translateY(0);
-  }
-
-  50% {
-    transform: rotate(3deg) translateY(-12px);
-  }
+  transform: rotate(3deg);
 }
 
 .hero-glow {
-  animation: pulseGlow 4s ease-in-out infinite;
-}
-
-@keyframes pulseGlow {
-
-  0%,
-  100% {
-    opacity: .7;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
+  opacity: .5;
 }
 
 /* Gradient shimmer on metrics */
@@ -5511,27 +5485,6 @@ img {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-/* Trust strip glow */
-.trust-strip {
-  background: linear-gradient(135deg, #e12c6a, #c91f56, #e12c6a);
-  background-size: 200% 100%;
-  animation: trustShimmer 6s ease infinite;
-}
-
-@keyframes trustShimmer {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 /* Feature cards glass effect */
