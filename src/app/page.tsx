@@ -46,17 +46,14 @@ export default function HomePage() {
               <Link className="button button-ghost" href="/product">Explore the platform <span>↗</span></Link>
             </div>
           </div>
-          <div className="hero-phone-wrap reveal reveal-delay-1" aria-label="Nexcore patient app preview">
-            <div className="hero-glow" />
+          <div className="hero-phone-wrap" aria-label="Nexcore patient app preview">
             <div className="phone-device compact">
-              <div className="phone-side left-one" /><div className="phone-side left-two" /><div className="phone-side right-one" />
               <div className="phone-screen" style={{ padding: 0, overflow: "hidden", position: "relative" }}>
                 <div className="phone-notch" />
                 <iframe
                   src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&mockup=false&scaleToFit=true&cursorType=touch"
                   style={{ width: "100%", height: "100%", border: "none", borderRadius: "38px", display: "block" }}
                   title="Nexcore App Prototype"
-                  allow="accelerometer; camera; clipboard-write; encrypted-media; geolocation; gyroscope; microphone; payment; usb"
                   loading="lazy"
                 />
               </div>
