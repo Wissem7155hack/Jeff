@@ -2130,12 +2130,7 @@ img {
 }
 
 .hero-glow {
-  width: 440px;
-  height: 440px;
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(225, 44, 106, .38), rgba(225, 44, 106, .07) 45%, transparent 70%);
-  filter: blur(20px);
+  display: none;
 }
 
 .floating-proof {
@@ -2235,7 +2230,7 @@ img {
 .trust-strip {
   padding: 20px;
   overflow: hidden;
-  background: var(--pink);
+  background: #1a1a2e;
   color: #fff;
   white-space: nowrap;
 }
@@ -5363,10 +5358,6 @@ img {
   transform: rotate(3deg);
 }
 
-.hero-glow {
-  opacity: .5;
-}
-
 /* Gradient shimmer on metrics */
 .metrics-grid strong {
   background: linear-gradient(180deg, #fff 0%, #ff92b8 50%, #e12c6a 100%);
@@ -5628,9 +5619,9 @@ img {
   }
 
   .hero-phone-wrap {
-    height: 510px;
+    height: 450px;
     margin: 35px auto 0;
-    transform: scale(.74);
+    transform: scale(.65);
     transform-origin: center top;
   }
 
@@ -5844,8 +5835,8 @@ img {
 
   .hero-phone-wrap {
     width: 100%;
-    height: 400px;
-    transform: scale(.58);
+    height: 350px;
+    transform: scale(.48);
     transform-origin: center top;
   }
 
