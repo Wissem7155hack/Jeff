@@ -38,7 +38,7 @@ export default function HomePage() {
             <h1>
               <AnimatedWords as="span" text="The branded app that grows your practice" />
               {" "}
-              <TypeWriter phrases={["while you sleep.", "after hours.", "around the clock.", "with your brand."]} />
+              <TypeWriter phrases={["while you sleep.", "after hours.", "around the clock."]} />
             </h1>
             <p data-reveal data-reveal-delay="120">Nexcore is the white-label mobile app for med spas, laser clinics, and aesthetic practices. Memberships, loyalty rewards, treatment shopping, automated offers, and business intelligence — all inside your own branded app. 70% of sales happen after hours. Capture them.</p>
             <div className="hero-actions" data-reveal data-reveal-delay="240">

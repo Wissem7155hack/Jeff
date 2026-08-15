@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300..800&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -2245,9 +2246,10 @@ img {
   align-items: center;
   gap: 30px;
   animation: marquee 28s linear infinite;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .14em;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .08em;
   text-transform: uppercase;
 }
 
@@ -3409,7 +3411,7 @@ img {
   align-items: center;
   gap: 7px;
   color: #706d73;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .breadcrumbs a {
@@ -4137,7 +4139,7 @@ img {
   display: flex;
   gap: 20px;
   color: #88848b;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .article-details span {
@@ -4232,7 +4234,7 @@ img {
   align-items: center;
   gap: 12px;
   color: #88848a;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -4288,10 +4290,10 @@ img {
   display: block;
   margin-bottom: 17px;
   color: #99959a;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: .1em;
+  letter-spacing: .12em;
 }
 
 .article-toc nav {
@@ -4300,13 +4302,14 @@ img {
 }
 
 .article-toc nav a {
-  padding: 9px 0;
+  padding: 10px 0;
   color: #5d5a60;
   display: flex;
   gap: 8px;
-  font-size: 9px;
-  line-height: 1.45;
+  font-size: 13px;
+  line-height: 1.5;
   text-decoration: none;
+  font-weight: 500;
 }
 
 .article-toc nav a:hover {
@@ -4316,6 +4319,7 @@ img {
 .article-toc nav i {
   color: var(--pink);
   font-style: normal;
+  font-weight: 700;
 }
 
 .article-toc>a {
@@ -4325,8 +4329,8 @@ img {
   color: #111;
   display: flex;
   justify-content: space-between;
-  font-size: 9px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 700;
   text-decoration: none;
 }
 
@@ -4445,10 +4449,10 @@ img {
 
 .article-callout>span {
   color: #f07da6;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: .1em;
+  letter-spacing: .12em;
 }
 
 .article-callout h2 {
@@ -5671,9 +5675,9 @@ img {
   }
 
   .hero-phone-wrap {
-    height: 565px;
+    height: 510px;
     margin: 35px auto 0;
-    transform: scale(.82);
+    transform: scale(.74);
     transform-origin: center top;
   }
 
@@ -5887,8 +5891,8 @@ img {
 
   .hero-phone-wrap {
     width: 100%;
-    height: 480px;
-    transform: scale(.68);
+    height: 400px;
+    transform: scale(.58);
     transform-origin: center top;
   }
 
@@ -6248,6 +6252,10 @@ html.js .reveal.is-visible {
   vertical-align: bottom;
   padding-bottom: .14em;
   margin-bottom: -.14em;
+}
+
+.aw-word:not(:last-child) {
+  margin-right: 0.24em;
 }
 
 html.js .aw-inner {
