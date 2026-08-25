@@ -35,7 +35,7 @@ export function SiteFooter() {
             <h2>Company</h2>
             <Link href="/about">About Nexcore</Link>
             <Link href="/contact">Contact</Link>
-            <a href="https://login.nexcore-app.com/">Client login</a>
+            <a href="https://admin.dermis.ai/auth/signin">Client login</a>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
           </div>
