@@ -615,12 +615,18 @@ img {
   z-index: 950;
   inset: 0;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   padding: 120px 26px 45px;
   background: rgba(250, 249, 248, .98);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-15px);
   transition: .35s;
+}
+
+.mobile-menu::-webkit-scrollbar {
+  display: none;
 }
 
 .mobile-menu.open {
@@ -5442,8 +5448,7 @@ img {
 }
 
 /* Solution page phone glow pulse */
-.phone-halo {
-}
+.phone-halo {}
 
 @keyframes haloBreath {
 
@@ -6244,6 +6249,24 @@ html.js .aw.is-visible .aw-inner {
   50% {
     opacity: 0;
   }
+}
+
+.region-btn {
+  transition: opacity 0.2s;
+}
+
+.region-btn:hover {
+  opacity: 0.8;
+}
+
+.header-region-select {
+  position: relative;
+}
+
+.header-region-select .region-menu {
+  right: -20px !important;
+  left: auto !important;
+  min-width: 220px !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

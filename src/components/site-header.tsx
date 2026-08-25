@@ -90,7 +90,7 @@ export function SiteHeader() {
         </div>
       </header>
 
-      <div className={`mobile-menu ${open ? "open" : ""}`} aria-hidden={!open}>
+      <div className={`mobile-menu ${open ? "open" : ""}`} aria-hidden={!open} data-lenis-prevent>
         <nav aria-label="Mobile navigation">
           <Link href="/product">Product <span>↗</span></Link>
           <p>Solutions</p>
