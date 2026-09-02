@@ -102,25 +102,48 @@ export default function HomePage() {
           <div className="step-cards">
             <article data-reveal data-reveal-delay="60">
               <span className="step-number">01</span>
-              <div className="step-visual brand-builder"><div className="builder-toolbar"><i /><i /><i /></div><div className="builder-logo"><span className="brand-mark"><span /></span>Your Clinic&apos;s Name</div><div className="color-row"><i /><i /><i /><i /></div></div>
-              <h3>1. Nexcore imports your brand info
-              </h3><p>By scraping your website for logo, colours, services & pricing to create your app in record time.
-
-              </p>
+              <div className="step-visual">
+                <Image
+                  src="https://framerusercontent.com/images/DO8OKFEwG4S82pSXJ1usIOtxaA.gif?scale-down-to=512&width=708&height=438"
+                  alt="Nexcore imports your brand info"
+                  fill
+                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+              <h3>1. Nexcore imports your brand info</h3>
+              <p>By scraping your website for logo, colours, services & pricing to create your app in record time.</p>
             </article>
             <article data-reveal data-reveal-delay="140">
               <span className="step-number">02</span>
-              <div className="step-visual app-ready"><div className="mini-phone"><span className="brand-mark"><span /></span><i /><i /><i /></div><div className="ready-badge"><Check size={15} /> Ready to preview</div></div>
-              <h3>2. Receive your app, 24h later
-              </h3><p>You’ll have the ability to immediately download your app from the App & Google Play store on your phone!
-
-              </p>
+              <div className="step-visual">
+                <Image
+                  src="https://framerusercontent.com/images/EgOjoZGUs19UqgskPIdrHZAjfkw.jpg?scale-down-to=512&width=649&height=402"
+                  alt="Receive your app 24h later"
+                  fill
+                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+              <h3>2. Receive your app, 24h later</h3>
+              <p>You&apos;ll have the ability to immediately download your app from the App & Google Play store on your phone!</p>
             </article>
             <article data-reveal data-reveal-delay="220">
               <span className="step-number">03</span>
-              <div className="step-visual sales-grow"><div className="growth-number">$28,640<small>App sales</small></div><svg viewBox="0 0 240 80" aria-hidden="true"><path d="M0 68 C35 65 40 48 72 52 C100 56 112 34 142 40 C172 46 184 10 240 14" fill="none" stroke="#e12c6a" strokeWidth="3" /></svg></div>
-              <h3>3. Start making passive sales!
-              </h3><p>Introduce the app to patients and follow sales, rewards, memberships, referrals, reviews, and visits.</p>
+              <div className="step-visual">
+                <Image
+                  src="https://framerusercontent.com/images/R6ys7b6LKdmTZzUZbGjtRWabtnU.gif?scale-down-to=512&width=708&height=438"
+                  alt="Start making passive sales"
+                  fill
+                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+              <h3>3. Start making passive sales!</h3>
+              <p>Introduce the app to patients and follow sales, rewards, memberships, referrals, reviews, and visits.</p>
             </article>
           </div>
         </div>
