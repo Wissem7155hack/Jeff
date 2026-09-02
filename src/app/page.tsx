@@ -103,17 +103,24 @@ export default function HomePage() {
             <article data-reveal data-reveal-delay="60">
               <span className="step-number">01</span>
               <div className="step-visual brand-builder"><div className="builder-toolbar"><i /><i /><i /></div><div className="builder-logo"><span className="brand-mark"><span /></span>Your Clinic&apos;s Name</div><div className="color-row"><i /><i /><i /><i /></div></div>
-              <h3>Bring in your brand</h3><p>Add your logo, colors, treatment information, prices, memberships, locations, and clinic details.</p>
+              <h3>1. Nexcore imports your brand info
+              </h3><p>By scraping your website for logo, colours, services & pricing to create your app in record time.
+
+              </p>
             </article>
             <article data-reveal data-reveal-delay="140">
               <span className="step-number">02</span>
               <div className="step-visual app-ready"><div className="mini-phone"><span className="brand-mark"><span /></span><i /><i /><i /></div><div className="ready-badge"><Check size={15} /> Ready to preview</div></div>
-              <h3>Preview the experience</h3><p>Review how patients will browse, shop, earn points, see rewards, and understand member benefits.</p>
+              <h3>2. Receive your app, 24h later
+              </h3><p>You’ll have the ability to immediately download your app from the App & Google Play store on your phone!
+
+              </p>
             </article>
             <article data-reveal data-reveal-delay="220">
               <span className="step-number">03</span>
               <div className="step-visual sales-grow"><div className="growth-number">$28,640<small>App sales</small></div><svg viewBox="0 0 240 80" aria-hidden="true"><path d="M0 68 C35 65 40 48 72 52 C100 56 112 34 142 40 C172 46 184 10 240 14" fill="none" stroke="#e12c6a" strokeWidth="3" /></svg></div>
-              <h3>Put Nexcore to work</h3><p>Introduce the app to patients and follow sales, rewards, memberships, referrals, reviews, and visits.</p>
+              <h3>3. Start making passive sales!
+              </h3><p>Introduce the app to patients and follow sales, rewards, memberships, referrals, reviews, and visits.</p>
             </article>
           </div>
         </div>

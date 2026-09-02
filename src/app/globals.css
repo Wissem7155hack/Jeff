@@ -2409,11 +2409,11 @@ img {
   top: 15px;
   right: 15px;
   padding: 7px 11px;
-  border: 1px solid rgba(0, 0, 0, .08);
+  border: 5px solid rgba(0, 0, 0, .08);
   border-radius: 20px;
   color: #79767b;
   background: rgba(255, 255, 255, .85);
-  font-size: 8px;
+  font-size: 18px;
   font-weight: 800;
   backdrop-filter: blur(10px);
 }
