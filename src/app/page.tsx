@@ -52,7 +52,7 @@ export default function HomePage() {
               <div className="phone-screen" style={{ padding: 0, overflow: "hidden", position: "relative" }}>
                 <div className="phone-notch" />
                 <iframe
-                  src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&scaleToFit=true&enableHotspotHints=true&cursorType=touch&mockup=true&bgColor=%23F5F5F5&bgImage=undefined&playSpeed=1"
+                  src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&scaleToFit=true&enableHotspotHints=true&cursorType=touch&mockup=true&bgColor=%23F5F5F5&bgImage=undefined&playSpeed=1&player=web"
                   style={{ width: "100%", height: "100%", border: "none", borderRadius: "38px", display: "block" }}
                   title="Nexcore App Prototype"
                   loading="lazy"

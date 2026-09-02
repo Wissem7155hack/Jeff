@@ -5535,8 +5535,8 @@ img {
   }
 
   .home-hero.dark-wave {
-    padding: 120px 0 60px;
-    min-height: auto;
+    padding: 150px 0 80px;
+    min-height: max(100svh, 860px);
   }
 
   .home-hero-inner {
@@ -5772,14 +5772,9 @@ img {
     font-size: 10px;
   }
 
-  .home-hero.light-minimal {
-    min-height: 85svh;
-    padding: 110px 16px 70px;
-  }
-
   .home-hero.dark-wave {
-    min-height: auto;
-    padding: 100px 0 50px;
+    min-height: max(100svh, 840px);
+    padding: 150px 0 80px;
   }
 
   .home-hero-copy h1 {
