@@ -52,7 +52,7 @@ const organizationSchema = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
         <Script id="enable-js-class" strategy="beforeInteractive">
           {`document.documentElement.classList.add("js");`}

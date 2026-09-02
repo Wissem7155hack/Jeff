@@ -16,6 +16,7 @@ import {
 import { DashboardPreview, ProductShowcase } from "@/components/product-visuals";
 import { AnimatedWords } from "@/components/animated-words";
 import { TypeWriter } from "@/components/typewriter";
+import { HeroWaveBackground } from "@/components/hero-wave-background";
 import { blogPosts, industryNav } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -28,19 +29,19 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
-      <section className="home-hero">
-        <Image className="home-hero-image" src="/imgs/bg.png" alt="A clinician caring for a patient in a modern treatment room" fill priority sizes="100vw" />
-        <div className="home-hero-overlay" />
-        <div className="hero-noise" />
+      <section className="home-hero dark-wave" aria-label="Nexcore practice growth platform">
+        <HeroWaveBackground />
         <div className="home-hero-inner">
           <div className="home-hero-copy">
-            <span className="eyebrow eyebrow-light" data-reveal><i /> Your practice, on every patient&apos;s phone</span>
+            <span className="eyebrow eyebrow-light" data-reveal><i /> YOUR PRACTICE, ON EVERY PATIENT&apos;S PHONE</span>
             <h1>
               <AnimatedWords as="span" text="The branded app that grows your practice" />
               {" "}
               <TypeWriter phrases={["while you sleep.", "after hours.", "around the clock."]} />
             </h1>
-            <p data-reveal data-reveal-delay="120">Nexcore is the white-label mobile app for med spas, laser clinics, and aesthetic practices. Memberships, loyalty rewards, treatment shopping, automated offers, and business intelligence — all inside your own branded app. 70% of sales happen after hours. Capture them.</p>
+            <p data-reveal data-reveal-delay="120">
+              Nexcore is the white-label mobile app for med spas, laser clinics, and aesthetic practices. Memberships, loyalty rewards, treatment shopping, automated offers, and business intelligence &mdash; all inside your own branded app. 70% of sales happen after hours. Capture them.
+            </p>
             <div className="hero-actions" data-reveal data-reveal-delay="240">
               <Link className="button button-white" href="/book-demo">Book a demo <ArrowRight size={17} /></Link>
               <Link className="button button-ghost" href="/product">Explore the platform <span>↗</span></Link>
@@ -51,7 +52,7 @@ export default function HomePage() {
               <div className="phone-screen" style={{ padding: 0, overflow: "hidden", position: "relative" }}>
                 <div className="phone-notch" />
                 <iframe
-                  src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&mockup=false&scaleToFit=true&cursorType=touch"
+                  src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&scaleToFit=true&enableHotspotHints=true&cursorType=touch&mockup=true&bgColor=%23F5F5F5&bgImage=undefined&playSpeed=1"
                   style={{ width: "100%", height: "100%", border: "none", borderRadius: "38px", display: "block" }}
                   title="Nexcore App Prototype"
                   loading="lazy"

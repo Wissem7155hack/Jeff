@@ -8,7 +8,12 @@ export function SiteFooter() {
       <div className="footer-top">
         <div className="footer-brand-block">
           <Link href="/" className="brand brand-light" aria-label="Nexcore home">
-            <span className="brand-mark" aria-hidden="true"><span /></span>
+            <span className="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="32" height="32" rx="8" fill="#141419" />
+                <path d="M9.5 22.5V9.5L22.5 22.5V9.5" stroke="#FFFFFF" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
             <span>Nexcore</span>
           </Link>
           <p>The branded mobile app and growth dashboard for modern aesthetic and wellness practices.</p>
