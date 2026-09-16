@@ -39,7 +39,7 @@ export default async function IndustryPage({ params }: Props) {
             <div className="hero-actions"><Link className="button button-pink" href="/book-demo">Book a demo <ArrowRight size={17} /></Link><Link className="button button-outline-dark" href="/product">Explore the platform <span>↗</span></Link></div>
           </div>
           <div className="industry-hero-image">
-            <Image src={industry.image} alt={industry.imageAlt} fill sizes="(max-width: 900px) 100vw, 50vw" />
+            <Image src={industry.image} alt={industry.imageAlt} fill loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" />
             <div className="industry-image-note"><span><Sparkles size={18} /></span><div><strong>{industry.imageNote}</strong><small>Nexcore platform</small></div></div>
           </div>
         </div>

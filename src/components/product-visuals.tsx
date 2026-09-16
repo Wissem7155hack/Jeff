@@ -47,7 +47,15 @@ export function ProtopiePhone({ src, title }: { src: string; title: string }) {
 export function ImagePhone({ src, alt }: { src: string; alt: string }) {
   return (
     <PhoneFrame title={alt}>
-      <Image src={src} alt={alt} width={280} height={586} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+      <Image
+        src={src}
+        alt={alt}
+        width={280}
+        height={586}
+        loading="lazy"
+        decoding="async"
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+      />
     </PhoneFrame>
   );
 }
@@ -215,7 +223,7 @@ export function ProductShowcase() {
         </div>
         <div className="showcase-phone" key={selected}>
           {selected === "ecommerce" && (
-            <ImagePhone src="/imgs/ECOM.jfif" alt="Ecommerce preview" />
+            <ImagePhone src="/imgs/ECOM.webp" alt="Ecommerce preview" />
           )}
           {selected === "mobile-rewards" && (
             <ProtopiePhone src="https://cloud.protopie.io/p/bbc5dfec037a92153d1995ce?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Mobile Rewards Prototype" />
@@ -262,7 +270,7 @@ export function DashboardPreview() {
           <div><span>Reviews</span><strong>164</strong><small>4.9 average rating</small></div>
         </div>
         <div className="dashboard-lower">
-          <div className="dashboard-chart-card"><div className="card-heading"><div><b>Sales overview</b><small>App revenue over time</small></div><span>Last 30 days⌄</span></div><div className="large-chart"><div className="chart-labels"><span>$30k</span><span>$20k</span><span>$10k</span><span>$0</span></div><div className="chart-area"><i className="grid g1" /><i className="grid g2" /><i className="grid g3" /><svg viewBox="0 0 500 180" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="pinkFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#e12c6a" stopOpacity=".28" /><stop offset="100%" stopColor="#e12c6a" stopOpacity="0" /></linearGradient></defs><path d="M0,150 C40,145 58,118 95,125 C130,132 145,88 185,98 C225,108 238,72 275,78 C318,85 330,43 375,54 C422,65 446,20 500,28 L500,180 L0,180 Z" fill="url(#pinkFill)" /><path d="M0,150 C40,145 58,118 95,125 C130,132 145,88 185,98 C225,108 238,72 275,78 C318,85 330,43 375,54 C422,65 446,20 500,28" fill="none" stroke="#e12c6a" strokeWidth="3" /></svg></div></div></div>
+          <div className="dashboard-chart-card"><div className="card-heading"><div><b>Sales overview</b><small>App revenue over time</small></div><span>Last 30 days⌄</span></div><div className="large-chart"><div className="chart-labels"><span>$30k</span><span>$20k</span><span>$10k</span><span>$0</span></div><div className="chart-area"><i className="grid g1" /><i className="grid g2" /><i className="grid g3" /><svg viewBox="0 0 500 180" width="500" height="180" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="pinkFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#e12c6a" stopOpacity=".28" /><stop offset="100%" stopColor="#e12c6a" stopOpacity="0" /></linearGradient></defs><path d="M0,150 C40,145 58,118 95,125 C130,132 145,88 185,98 C225,108 238,72 275,78 C318,85 330,43 375,54 C422,65 446,20 500,28 L500,180 L0,180 Z" fill="url(#pinkFill)" /><path d="M0,150 C40,145 58,118 95,125 C130,132 145,88 185,98 C225,108 238,72 275,78 C318,85 330,43 375,54 C422,65 446,20 500,28" fill="none" stroke="#e12c6a" strokeWidth="3" /></svg></div></div></div>
           <div className="dashboard-activity"><div className="card-heading"><div><b>Recent activity</b><small>Live from your app</small></div><span>View all</span></div><div className="activity-list"><div><i className="sale"><ShoppingBag size={14} /></i><p><b>Package purchased</b><small>Amelia R. · just now</small></p><strong>+$280</strong></div><div><i className="review"><Star size={14} /></i><p><b>New clinic review</b><small>Sophie M. · 4 min ago</small></p><strong>5.0</strong></div><div><i className="reward"><Gift size={14} /></i><p><b>Reward redeemed</b><small>Ella T. · 11 min ago</small></p><strong>Done</strong></div><div><i className="member"><WalletCards size={14} /></i><p><b>New membership</b><small>Olivia K. · 18 min ago</small></p><strong>+$290</strong></div></div></div>
         </div>
       </div>

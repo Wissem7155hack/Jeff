@@ -50,7 +50,7 @@ export default async function SolutionPage({ params }: Props) {
           </div>
           <div className="solution-phone">
             <div className="phone-halo" />
-            {slug === "ecommerce" && <ImagePhone src="/imgs/ECOM.jfif" alt="Ecommerce preview" />}
+            {slug === "ecommerce" && <ImagePhone src="/imgs/ECOM.webp" alt="Ecommerce preview" />}
             {slug === "mobile-rewards" && <ProtopiePhone src="https://cloud.protopie.io/p/bbc5dfec037a92153d1995ce?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Mobile Rewards Prototype" />}
             {slug === "memberships" && <ProtopiePhone src="https://cloud.protopie.io/p/c130351e2ef62af898588c52?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Memberships Prototype" />}
             {slug === "patient-engagement" && <ProtopiePhone src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Patient Engagement Prototype" />}

@@ -16,7 +16,7 @@ export default function ProductPage() {
       <section className="product-hero section-light">
         <div className="product-hero-grid section-container">
           <div className="product-hero-copy"><span className="eyebrow eyebrow-pink"><Smartphone size={14} /> The Nexcore platform</span><h1>One branded app for patients. One clear dashboard for your practice.</h1><p>Bring treatment discovery, mobile shopping, memberships, rewards, clinic content, and growth reporting into a connected experience built around your brand.</p><div className="hero-actions"><Link href="/book-demo" className="button button-pink">Book a demo <ArrowRight size={17} /></Link><Link href="#patient-app" className="button button-outline-dark">Explore the platform <span>↓</span></Link></div></div>
-          <div className="product-hero-visual"><div className="product-visual-back" /><ImagePhone src="/imgs/ECOM.jfif" alt="Ecommerce preview" /><div className="product-float-card"><span><Gift size={18} /></span><div><small>Points earned</small><strong>+280</strong></div></div><div className="product-float-card second"><span><ShoppingBag size={18} /></span><div><small>Order complete</small><strong>$280</strong></div></div></div>
+          <div className="product-hero-visual"><div className="product-visual-back" /><ImagePhone src="/imgs/ECOM.webp" alt="Ecommerce preview" /><div className="product-float-card"><span><Gift size={18} /></span><div><small>Points earned</small><strong>+280</strong></div></div><div className="product-float-card second"><span><ShoppingBag size={18} /></span><div><small>Order complete</small><strong>$280</strong></div></div></div>
         </div>
       </section>
 

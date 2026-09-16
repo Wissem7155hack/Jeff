@@ -23,7 +23,7 @@ export default function BlogIndexPage() {
       <section className="featured-article section-light">
         <div className="section-container">
           <article>
-            <Link className="featured-article-image" href={`/resources/blog/${featured.slug}`}><Image src={featured.image} alt={featured.imageAlt} fill sizes="(max-width: 900px) 100vw, 55vw" /></Link>
+            <Link className="featured-article-image" href={`/resources/blog/${featured.slug}`}><Image src={featured.image} alt={featured.imageAlt} fill loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 55vw" /></Link>
             <div className="featured-article-copy">
               <div className="article-details"><span><Calendar size={13} /> {featured.date}</span><span><Clock size={13} /> {featured.readTime}</span></div>
               <div className="article-meta"><span>{featured.category}</span></div>
@@ -41,7 +41,7 @@ export default function BlogIndexPage() {
           <div className="blog-index-grid">
             {rest.map((post) => (
               <article key={post.slug}>
-                <Link className="blog-card-image" href={`/resources/blog/${post.slug}`}><Image src={post.image} alt={post.imageAlt} fill sizes="(max-width: 800px) 100vw, 50vw" /></Link>
+                <Link className="blog-card-image" href={`/resources/blog/${post.slug}`}><Image src={post.image} alt={post.imageAlt} fill loading="lazy" decoding="async" sizes="(max-width: 800px) 100vw, 50vw" /></Link>
                 <div className="article-meta" style={{ marginTop: 19 }}><span>{post.category}</span><span>{post.readTime}</span></div>
                 <h2><Link href={`/resources/blog/${post.slug}`}>{post.title}</Link></h2>
                 <p>{post.excerpt}</p>

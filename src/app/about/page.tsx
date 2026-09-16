@@ -20,7 +20,7 @@ export default function AboutPage() {
       <section className="about-story section-light">
         <div className="section-container about-story-grid">
           <div className="about-image">
-            <Image src="https://images.pexels.com/photos/4266948/pexels-photo-4266948.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=900" alt="Clinician and patient speaking during a consultation" fill sizes="(max-width: 900px) 100vw, 45vw" />
+            <Image src="https://images.pexels.com/photos/4266948/pexels-photo-4266948.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=900" alt="Clinician and patient speaking during a consultation" fill loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 45vw" />
             <div className="image-caption"><HeartHandshake size={18} /><span>Designed around long-term patient relationships</span></div>
           </div>
           <div className="about-copy">

@@ -106,7 +106,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="related-grid">
             {related.map((r) => (
               <article key={r.slug}>
-                <Link className="related-image" href={`/resources/blog/${r.slug}`}><Image src={r.image} alt={r.imageAlt} fill sizes="(max-width: 800px) 100vw, 33vw" /></Link>
+                <Link className="related-image" href={`/resources/blog/${r.slug}`}><Image src={r.image} alt={r.imageAlt} fill loading="lazy" decoding="async" sizes="(max-width: 800px) 100vw, 33vw" /></Link>
                 <span>{r.category}</span>
                 <h3><Link href={`/resources/blog/${r.slug}`}>{r.title}</Link></h3>
                 <Link className="text-link" href={`/resources/blog/${r.slug}`}>Read insight <span>↗</span></Link>

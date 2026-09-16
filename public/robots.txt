@@ -1,4 +1,47 @@
+# Robots.txt for Nexcore (https://nexcore-app.com)
+# Configured for optimal crawl budget and zero public route blocking
+
+User-agent: Googlebot
+Allow: /
+Disallow: /app/
+Disallow: /dashboard/
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /app/
+Disallow: /dashboard/
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /app/
+Disallow: /dashboard/
+Disallow: /api/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /app/
+Disallow: /dashboard/
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /app/
+Disallow: /dashboard/
+Disallow: /api/
+
+User-agent: Applebot
+Allow: /
+Disallow: /app/
+Disallow: /dashboard/
+Disallow: /api/
+
 User-agent: *
 Allow: /
+Disallow: /app/
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /_next/
 
 Sitemap: https://nexcore-app.com/sitemap.xml

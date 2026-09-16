@@ -17,6 +17,7 @@ import { DashboardPreview, ProductShowcase } from "@/components/product-visuals"
 import { AnimatedWords } from "@/components/animated-words";
 import { TypeWriter } from "@/components/typewriter";
 import { HeroWaveBackground } from "@/components/hero-wave-background";
+import { HeroPhone } from "@/components/hero-phone";
 import { blogPosts, industryNav } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -47,19 +48,7 @@ export default function HomePage() {
               <Link className="button button-ghost" href="/product">Explore the platform <span>↗</span></Link>
             </div>
           </div>
-          <div className="hero-phone-wrap" aria-label="Nexcore patient app preview">
-            <div className="phone-device compact">
-              <div className="phone-screen" style={{ padding: 0, overflow: "hidden", position: "relative" }}>
-                <div className="phone-notch" />
-                <iframe
-                  src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&scaleToFit=true&enableHotspotHints=true&cursorType=touch&mockup=true&bgColor=%23F5F5F5&bgImage=undefined&playSpeed=1&player=web"
-                  style={{ width: "100%", height: "100%", border: "none", borderRadius: "38px", display: "block" }}
-                  title="Nexcore App Prototype"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          </div>
+          <HeroPhone />
         </div>
         <div className="hero-scroll"><span>Discover Nexcore</span><i /></div>
       </section>
@@ -108,6 +97,8 @@ export default function HomePage() {
                   alt="Nexcore imports your brand info"
                   fill
                   unoptimized
+                  loading="lazy"
+                  decoding="async"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   style={{ objectFit: "cover" }}
                 />
@@ -123,6 +114,8 @@ export default function HomePage() {
                   alt="Receive your app 24h later"
                   fill
                   unoptimized
+                  loading="lazy"
+                  decoding="async"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   style={{ objectFit: "cover" }}
                 />
@@ -138,6 +131,8 @@ export default function HomePage() {
                   alt="Start making passive sales"
                   fill
                   unoptimized
+                  loading="lazy"
+                  decoding="async"
                   sizes="(max-width: 768px) 100vw, 33vw"
                   style={{ objectFit: "cover" }}
                 />
@@ -181,7 +176,7 @@ export default function HomePage() {
       </section>
 
       <section className="audiences-section">
-        <div className="audience-image-wrap"><Image src="https://images.pexels.com/photos/6899543/pexels-photo-6899543.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=1500" alt="Premium clinic reception with modern neutral interior" fill sizes="(max-width: 900px) 100vw, 50vw" /></div>
+        <div className="audience-image-wrap"><Image src="https://images.pexels.com/photos/6899543/pexels-photo-6899543.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=1500" alt="Premium clinic reception with modern neutral interior" fill loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 50vw" /></div>
         <div className="audience-content" data-reveal>
           <span className="eyebrow eyebrow-pink">Made for your kind of practice</span>
           <h2>One platform. Built around considered care.</h2>
@@ -201,7 +196,7 @@ export default function HomePage() {
           <div className="article-grid">
             {blogPosts.slice(0, 3).map((post, index) => (
               <article className={`article-card ${index === 0 ? "featured" : ""}`} key={post.slug} data-reveal data-reveal-delay={index * 120}>
-                <Link className="article-image" href={`/resources/blog/${post.slug}`}><Image src={post.image} alt={post.imageAlt} fill sizes={index === 0 ? "(max-width: 800px) 100vw, 50vw" : "(max-width: 800px) 100vw, 25vw"} /></Link>
+                <Link className="article-image" href={`/resources/blog/${post.slug}`}><Image src={post.image} alt={post.imageAlt} fill loading="lazy" decoding="async" sizes={index === 0 ? "(max-width: 800px) 100vw, 50vw" : "(max-width: 800px) 100vw, 25vw"} /></Link>
                 <div className="article-meta"><span>{post.category}</span><span>{post.readTime}</span></div>
                 <h3><Link href={`/resources/blog/${post.slug}`}>{post.title}</Link></h3>
                 <p>{post.excerpt}</p>
@@ -231,7 +226,7 @@ export default function HomePage() {
       </section>
 
       <section className="final-cta">
-        <Image src="https://images.pexels.com/photos/7750104/pexels-photo-7750104.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=1800" alt="Bright contemporary aesthetic practice interior" fill sizes="100vw" />
+        <Image src="https://images.pexels.com/photos/7750104/pexels-photo-7750104.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=1800" alt="Bright contemporary aesthetic practice interior" fill loading="lazy" decoding="async" sizes="100vw" />
         <div className="final-cta-overlay" />
         <div className="final-cta-content" data-reveal><span className="eyebrow eyebrow-light">Your next growth channel</span><h2>Make your practice available every hour of the day.</h2><p>See how Nexcore can bring your mobile storefront, rewards, memberships, engagement, and app performance together.</p><Link className="button button-white" href="/book-demo">Book your demo <ArrowRight size={17} /></Link></div>
       </section>

@@ -6164,6 +6164,15 @@ html.js .aw.is-visible .aw-inner {
   filter: blur(0);
 }
 
+/* Critical Above-The-Fold Hero Instant Render (Sub-second FCP & LCP) */
+html.js .home-hero [data-reveal],
+html.js .home-hero .reveal,
+html.js .home-hero .aw-inner {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
 /* Typewriter */
 .typewriter {
   display: inline-block;
