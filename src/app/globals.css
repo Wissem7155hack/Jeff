@@ -2033,7 +2033,13 @@ img {
   font-size: 7px;
 }
 
-/* Home Hero (Dark Volumetric Wave & Left-Aligned Grid) */
+/* Home & Product Hero */
+.home-hero.section-light,
+.product-hero.section-light {
+  background: var(--paper);
+  color: var(--ink);
+}
+
 .home-hero.dark-wave {
   position: relative;
   min-height: 100svh;
@@ -2045,7 +2051,7 @@ img {
   overflow: hidden;
 }
 
-.hero-wireframe-canvas-wrap {
+.home-hero-bg {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -2053,16 +2059,19 @@ img {
   overflow: hidden;
 }
 
-.hero-wireframe-canvas {
+.home-hero-bg img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
-.hero-olive-vignette {
+.home-hero-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 65% 50%, transparent 35%, rgba(4, 6, 4, 0.8) 100%);
+  background: radial-gradient(circle at 75% 50%, rgba(6, 8, 6, 0.05) 0%, rgba(6, 8, 6, 0.55) 75%, #060806 100%),
+              linear-gradient(90deg, rgba(6, 8, 6, 0.78) 0%, rgba(6, 8, 6, 0.35) 45%, rgba(6, 8, 6, 0.1) 100%);
   pointer-events: none;
 }
 
@@ -5906,12 +5915,26 @@ img {
   .product-hero,
   .solution-hero {
     padding-top: 125px;
+    padding-bottom: 60px;
+    min-height: auto;
   }
 
   .product-hero-copy h1,
   .solution-hero-copy h1,
   .industry-hero-copy h1 {
-    font-size: 47px;
+    font-size: clamp(34px, 8.5vw, 47px);
+  }
+
+  .product-hero-visual {
+    height: 520px;
+    margin: 0 auto;
+    transform: scale(0.88);
+    transform-origin: center top;
+  }
+
+  .product-visual-back {
+    width: 320px;
+    height: 360px;
   }
 
   .two-side-grid,
@@ -6165,6 +6188,9 @@ html.js .aw.is-visible .aw-inner {
 }
 
 /* Critical Above-The-Fold Hero Instant Render (Sub-second FCP & LCP) */
+html.js .product-hero [data-reveal],
+html.js .product-hero .reveal,
+html.js .product-hero .aw-inner,
 html.js .home-hero [data-reveal],
 html.js .home-hero .reveal,
 html.js .home-hero .aw-inner {

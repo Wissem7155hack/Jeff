@@ -13,11 +13,9 @@ import {
   Smartphone,
   Sparkles,
 } from "lucide-react";
-import { DashboardPreview, ProductShowcase } from "@/components/product-visuals";
+import { DashboardPreview, ProductShowcase, ProtopiePhone } from "@/components/product-visuals";
 import { AnimatedWords } from "@/components/animated-words";
 import { TypeWriter } from "@/components/typewriter";
-import { HeroWaveBackground } from "@/components/hero-wave-background";
-import { HeroPhone } from "@/components/hero-phone";
 import { blogPosts, industryNav } from "@/lib/site-data";
 
 export const metadata: Metadata = {
@@ -30,27 +28,51 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
-      <section className="home-hero dark-wave" aria-label="Nexcore practice growth platform">
-        <HeroWaveBackground />
-        <div className="home-hero-inner">
-          <div className="home-hero-copy">
-            <span className="eyebrow eyebrow-light" data-reveal><i /> YOUR PRACTICE, ON EVERY PATIENT&apos;S PHONE</span>
+      <section className="product-hero home-hero section-light" aria-label="Nexcore practice growth platform">
+        <div className="product-hero-grid section-container">
+          <div className="product-hero-copy">
+            <span className="eyebrow eyebrow-pink" data-reveal>
+              <Smartphone size={14} /> YOUR PRACTICE, ON EVERY PATIENT&apos;S PHONE
+            </span>
             <h1>
-              <AnimatedWords as="span" text="The branded app that grows your practice" />
-              {" "}
-              <TypeWriter phrases={["while you sleep.", "after hours.", "around the clock."]} />
+              <AnimatedWords as="span" text="The branded app that grows your practice" />{" "}
+              <TypeWriter className="tw-plain" phrases={["while you sleep.", "after hours.", "around the clock."]} />
             </h1>
             <p data-reveal data-reveal-delay="120">
               Nexcore is the white-label mobile app for med spas, laser clinics, and aesthetic practices. Memberships, loyalty rewards, treatment shopping, automated offers, and business intelligence &mdash; all inside your own branded app. 70% of sales happen after hours. Capture them.
             </p>
             <div className="hero-actions" data-reveal data-reveal-delay="240">
-              <Link className="button button-white" href="/book-demo">Book a demo <ArrowRight size={17} /></Link>
-              <Link className="button button-ghost" href="/product">Explore the platform <span>↗</span></Link>
+              <Link className="button button-pink" href="/book-demo">
+                Book a demo <ArrowRight size={17} />
+              </Link>
+              <Link className="button button-outline-dark" href="/product">
+                Explore the platform <span>↗</span>
+              </Link>
             </div>
           </div>
-          <HeroPhone />
+          <div className="product-hero-visual">
+            <div className="product-visual-back" />
+            <ProtopiePhone
+              src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&scaleToFit=true&enableHotspotHints=true&cursorType=touch"
+              title="Nexcore App Prototype"
+              eager
+            />
+            <div className="product-float-card">
+              <span><Gift size={18} /></span>
+              <div>
+                <small>Points earned</small>
+                <strong>+280</strong>
+              </div>
+            </div>
+            <div className="product-float-card second">
+              <span><ShoppingBag size={18} /></span>
+              <div>
+                <small>Order complete</small>
+                <strong>$280</strong>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="hero-scroll"><span>Discover Nexcore</span><i /></div>
       </section>
 
       <section className="trust-strip" aria-label="Platform capabilities">

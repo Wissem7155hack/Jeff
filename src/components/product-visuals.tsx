@@ -36,10 +36,10 @@ export function PhoneFrame({ children, title }: { children: ReactNode; title: st
   );
 }
 
-export function ProtopiePhone({ src, title }: { src: string; title: string }) {
+export function ProtopiePhone({ src, title, eager = false }: { src: string; title: string; eager?: boolean }) {
   return (
     <PhoneFrame title={title}>
-      <iframe src={src} style={{ width: "100%", height: "100%", border: "none", borderRadius: "38px", display: "block" }} title={title} allow="accelerometer; camera; clipboard-write; encrypted-media; geolocation; gyroscope; microphone; payment; usb" loading="lazy" />
+      <iframe src={src} style={{ width: "100%", height: "100%", border: "none", borderRadius: "38px", display: "block" }} title={title} allow="accelerometer; camera; clipboard-write; encrypted-media; geolocation; gyroscope; microphone; payment; usb" loading={eager ? "eager" : "lazy"} />
     </PhoneFrame>
   );
 }
