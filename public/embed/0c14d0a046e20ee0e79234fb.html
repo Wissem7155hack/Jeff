@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head>
+  <base href="https://cloud.protopie.io/">
+  <script>
+    (function() {
+      // 1. Force Desktop Environment across all navigator properties
+      const DESKTOP_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+      const DESKTOP_PLATFORM = "Win32";
+      
+      try {
+        Object.defineProperty(navigator, "userAgent", { get: () => DESKTOP_UA, configurable: true });
+        Object.defineProperty(navigator, "appVersion", { get: () => DESKTOP_UA, configurable: true });
+        Object.defineProperty(navigator, "platform", { get: () => DESKTOP_PLATFORM, configurable: true });
+        Object.defineProperty(navigator, "maxTouchPoints", { get: () => 0, configurable: true });
+        if (navigator.userAgentData) {
+          Object.defineProperty(navigator.userAgentData, "mobile", { get: () => false, configurable: true });
+          Object.defineProperty(navigator.userAgentData, "platform", { get: () => "Windows", configurable: true });
+        }
+      } catch(e) {}
+
+      // 2. Spoof media queries (pointer: coarse -> false)
+      const origMatchMedia = window.matchMedia;
+      if (origMatchMedia) {
+        window.matchMedia = function(q) {
+          if (q && (q.includes("pointer: coarse") || q.includes("(hover: none)"))) {
+            return {
+              matches: false,
+              media: q,
+              onchange: null,
+              addListener: function(){},
+              removeListener: function(){},
+              addEventListener: function(){},
+              removeEventListener: function(){},
+              dispatchEvent: function(){ return false; }
+            };
+          }
+          return origMatchMedia.call(window, q);
+        };
+      }
+
+      // 3. Pre-seed ProtoPie storage flags to mark warnings as dismissed
+      try {
+        localStorage.setItem("hasPlayerFeatureWarningShown", "true");
+        localStorage.setItem("dontShowPlayerPopup", "true");
+        localStorage.setItem("protopie_dont_show_player_popup", "true");
+        localStorage.setItem("player_popup_dismissed", "true");
+        sessionStorage.setItem("hasPlayerFeatureWarningShown", "true");
+      } catch(e) {}
+
+      // 4. Active MutationObserver to instantly remove/dismiss any popup if rendered
+      function killPopups() {
+        const dialog = document.getElementById("dialog");
+        const dimmer = document.getElementById("dimmer");
+        if (dialog && dialog.childNodes.length > 0) {
+          const buttons = dialog.querySelectorAll("button");
+          buttons.forEach(function(btn) {
+            if (btn.innerText && btn.innerText.toLowerCase().includes("continue")) {
+              btn.click();
+            }
+          });
+          dialog.innerHTML = "";
+        }
+        if (dimmer) {
+          dimmer.innerHTML = "";
+          dimmer.style.display = "none";
+        }
+        const modals = document.querySelectorAll('[class*="Modal"], [class*="modal"], [role="dialog"]');
+        modals.forEach(function(el) {
+          if (el.textContent && (el.textContent.includes("ProtoPie Player") || el.textContent.includes("Web browser"))) {
+            el.remove();
+          }
+        });
+      }
+
+      const observer = new MutationObserver(killPopups);
+      if (document.documentElement) {
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+      } else {
+        document.addEventListener("DOMContentLoaded", function() {
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+        });
+      }
+      setInterval(killPopups, 200);
+    })();
+  </script>
+  <style>
+    /* Hard CSS block on any player dialog / modal / dimmer */
+    #dialog, #dimmer, #dialog > div, [role="dialog"], [class*="Modal"], [class*="modal"], [class*="Dialog"] {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"><meta name="theme-color" content="#000000"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000"><meta name="description" content="ProtoPie Cloud lets you share, review, and approve your work. Move beyond unintuitive screenshots and written spec descriptions."><meta name="keyword" content="prototype design, prototyping tool, prototyping tools, prototyping tool for mac, prototyping tool for Windows, app ui design, interaction, interaction design, protopie, app design, Interactive prototyping, mobile design, code free prototyping tool, design tool, sensor prototyping, interaction design, prototyping software, offline design tool, ios prototyping, android prototyping, proto pie, 프로토 파이, 프로토파이, cloud, URL share, video, windows, 스튜디오씨드, studio xid"><link rel="shortcut icon" href="/favicon.ico"><link rel="preload" as="font" type="font/woff2" href="/fonts/Inter/Inter-Regular.woff2?v=3.19" crossorigin><link rel="preload" as="font" type="font/woff2" href="/fonts/Inter/Inter-SemiBold.woff2?v=3.19" crossorigin><meta property="fb:app_id" content="462675533923571"><meta property="og:url" content="https://cloud.protopie.io/"><meta property="og:title" content="ProtoPie Cloud"><meta property="og:site_name" content="ProtoPie Cloud"><meta property="og:type" content="website"><meta property="og:description" content="ProtoPie Cloud lets you share, review, and approve your work. Move beyond unintuitive screenshots and written spec descriptions."><meta property="og:image" content="https://cdn.protopie.io/cloud/og/cloud_main_share.png"><meta property="og:image:width" content="600"><meta property="og:image:height" content="315"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="ProtoPie Cloud"><meta name="twitter:description" content="ProtoPie is the easiest tool used to turn your UX design ideas into highly interactive prototypes for mobile, desktop, web, all the way to IoT."><meta name="twitter:image" content="https://cdn.protopie.io/cloud/og/cloud_main_share.png"><meta itemprop="name" content="ProtoPie Cloud"><meta itemprop="description" content="ProtoPie is the easiest tool used to turn your UX design ideas into highly interactive prototypes for mobile, desktop, web, all the way to IoT."><meta itemprop="image" content="https://cdn.protopie.io/cloud/og/cloud_main_share.png"><meta itemprop="url" content="https://cloud.protopie.io/"><script>!(function (w, d, i, s) {
+        function l() {
+          if (!d.getElementById(i)) {
+            var f = d.getElementsByTagName(s)[0],
+              e = d.createElement(s);
+            ((e.type = 'text/javascript'),
+              (e.async = !0),
+              (e.src = 'https://canny.io/sdk.js'),
+              f.parentNode.insertBefore(e, f));
+          }
+        }
+        if ('function' != typeof w.Canny) {
+          var c = function () {
+            c.q.push(arguments);
+          };
+          ((c.q = []),
+            (w.Canny = c),
+            'complete' === d.readyState
+              ? l()
+              : w.attachEvent
+                ? w.attachEvent('onload', l)
+                : w.addEventListener('load', l, !1));
+        }
+      })(window, document, 'canny-jssdk', 'script');</script><title>Protopie Cloud</title></head><body><div id="root"></div><div id="pop"></div><div id="dimmer"></div><div id="dialog"></div><div id="selectOption"></div><div id="alert"></div><script nomodule src="%PUBLIC_URL%/scripts/polyfill.min.js" crossorigin="anonymous"></script><noscript>You need to enable javascript in order to use ProtoPie Cloud.</noscript><script defer="defer" src="https://static.protopie.io/web/static/js/3877be79764e9c258b9e.js"></script><script defer="defer" src="https://static.protopie.io/web/static/js/86b25f7ff596df02d9da.js"></script></body></html>
