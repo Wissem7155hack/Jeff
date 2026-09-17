@@ -57,20 +57,8 @@ export default function HomePage() {
               title="Nexcore App Prototype"
               eager
             />
-            <div className="product-float-card">
-              <span><Gift size={18} /></span>
-              <div>
-                <small>Points earned</small>
-                <strong>+280</strong>
-              </div>
-            </div>
-            <div className="product-float-card second">
-              <span><ShoppingBag size={18} /></span>
-              <div>
-                <small>Order complete</small>
-                <strong>$280</strong>
-              </div>
-            </div>
+
+
           </div>
         </div>
       </section>
@@ -272,6 +260,6 @@ export default function HomePage() {
           offers: { "@type": "Offer", availability: "https://schema.org/OnlineOnly" },
         })
       }} />
-    </main>
+    </main >
   );
 }
