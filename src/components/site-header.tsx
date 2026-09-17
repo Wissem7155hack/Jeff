@@ -9,17 +9,34 @@ import { industryNav, solutionNav } from "@/lib/site-data";
 function Brand() {
   return (
     <Link href="/" className="brand" aria-label="Nexcore home">
-      <span className="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <span
+        className="brand-mark"
+        aria-hidden="true"
+        style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <svg
+          viewBox="0 0 32 32"
+          width="32"
+          height="32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ display: "block" }}
+        >
+          {/* Outer Squircle Box */}
           <rect width="32" height="32" rx="8" fill="#141419" />
-          {/* Adjusted path to visually center the "N" */}
-          <path
-            d="M10 22V10L22 22V10"
-            stroke="#FFFFFF"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+
+          {/* 
+            Optically Centered 'N' 
+            3 independent strokes eliminate diagonal blob distortion
+          */}
+          <g stroke="#FFFFFF" strokeWidth="2.6" strokeLinecap="round">
+            {/* Left Vertical Line */}
+            <line x1="10.8" y1="9.5" x2="10.8" y2="22.5" />
+            {/* Right Vertical Line */}
+            <line x1="21.2" y1="9.5" x2="21.2" y2="22.5" />
+            {/* Center Diagonal Line */}
+            <line x1="10.8" y1="9.8" x2="21.2" y2="22.2" />
+          </g>
         </svg>
       </span>
       <span>Nexcore</span>
