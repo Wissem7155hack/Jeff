@@ -16,8 +16,8 @@ function Brand() {
       >
         <svg
           viewBox="0 0 32 32"
-          width="32"
-          height="32"
+          width="100%"
+          height="100%"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           style={{ display: "block" }}
@@ -25,16 +25,10 @@ function Brand() {
           {/* Outer Squircle Box */}
           <rect width="32" height="32" rx="8" fill="#141419" />
 
-          {/* 
-            Optically Centered 'N' 
-            3 independent strokes eliminate diagonal blob distortion
-          */}
+          {/* Optically Centered 'N' */}
           <g stroke="#FFFFFF" strokeWidth="2.6" strokeLinecap="round">
-            {/* Left Vertical Line */}
             <line x1="10.8" y1="9.5" x2="10.8" y2="22.5" />
-            {/* Right Vertical Line */}
             <line x1="21.2" y1="9.5" x2="21.2" y2="22.5" />
-            {/* Center Diagonal Line */}
             <line x1="10.8" y1="9.8" x2="21.2" y2="22.2" />
           </g>
         </svg>
@@ -110,7 +104,7 @@ export function SiteHeader() {
             <Link className={pathname === "/about" || pathname === "/about/" ? "active" : ""} href="/about">Company</Link>
           </nav>
           <div className="header-actions">
-            <a className="login-link" href="https://admin.dermis.ai/auth/signin">Log in</a>
+            <a className="login-link" href=" #">Log in</a>
             <Link className="button button-dark button-small" href="/book-demo">Book a demo <span>↗</span></Link>
           </div>
           <button className="menu-toggle" type="button" aria-label={open ? "Close navigation" : "Open navigation"} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
@@ -130,7 +124,7 @@ export function SiteHeader() {
           <Link href="/about">Company <span>↗</span></Link>
           <Link href="/contact">Contact <span>↗</span></Link>
           <div className="mobile-menu-actions">
-            <a className="button button-outline-dark" href="https://admin.dermis.ai/auth/signin">Log in</a>
+            <a className="button button-outline-dark" href=" #">Log in</a>
             <Link className="button button-pink" href="/book-demo">Book a demo <span>↗</span></Link>
           </div>
         </nav>

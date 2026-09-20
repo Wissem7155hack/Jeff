@@ -8,10 +8,14 @@ export function SiteFooter() {
       <div className="footer-top">
         <div className="footer-brand-block">
           <Link href="/" className="brand brand-light" aria-label="Nexcore home">
-            <span className="brand-mark" aria-hidden="true">
-              <svg viewBox="0 0 32 32" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <span className="brand-mark" aria-hidden="true" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+              <svg viewBox="0 0 32 32" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
                 <rect width="32" height="32" rx="8" fill="#141419" />
-                <path d="M9.5 22.5V9.5L22.5 22.5V9.5" stroke="#FFFFFF" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+                <g stroke="#FFFFFF" strokeWidth="2.6" strokeLinecap="round">
+                  <line x1="10.8" y1="9.5" x2="10.8" y2="22.5" />
+                  <line x1="21.2" y1="9.5" x2="21.2" y2="22.5" />
+                  <line x1="10.8" y1="9.8" x2="21.2" y2="22.2" />
+                </g>
               </svg>
             </span>
             <span>Nexcore</span>
@@ -40,7 +44,7 @@ export function SiteFooter() {
             <h2>Company</h2>
             <Link href="/about">About Nexcore</Link>
             <Link href="/contact">Contact</Link>
-            <a href="https://admin.dermis.ai/auth/signin">Client login</a>
+            <a href="#">Client login</a>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
           </div>

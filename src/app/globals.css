@@ -28,14 +28,19 @@
   padding: 0;
 }
 
+html {
+  overflow-x: clip;
+}
+
 html:not(.lenis) {
   scroll-behavior: smooth;
-  overflow-x: hidden;
 }
 
 body {
   min-width: 320px;
-  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
   background: var(--ink);
   color: var(--ink);
   font-family: "Manrope Variable", "Manrope", sans-serif;
@@ -382,7 +387,9 @@ img {
   width: 26px;
   height: 26px;
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 8px;
   background: #09090a;
   overflow: hidden;
@@ -5763,16 +5770,23 @@ img {
     width: calc(100% - 32px);
   }
 
-  .site-header {
-    width: calc(100% - 20px);
+    .site-header {
+    top: 12px !important;
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+    max-width: calc(100vw - 20px) !important;
+    transform: none !important;
   }
 
   .header-shell {
-    padding: 0 9px 0 18px;
+    width: 100%;
+    padding: 0 10px 0 16px;
   }
 
   .brand {
     font-size: 19px;
+    flex-shrink: 0;
   }
 
   .button {
@@ -6269,4 +6283,11 @@ html.js .home-hero .aw-inner {
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+
+main#main-content,
+main {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
 }
