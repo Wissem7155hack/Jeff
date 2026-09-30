@@ -33,7 +33,7 @@ export default function ProductPage() {
               <article><span><ShoppingBag size={20} /></span><div><h3>Mobile storefront</h3><p>Explore treatments, packages, images, testimonials, preparation guidance, aftercare, quantities, and pricing.</p></div></article>
               <article><span><RefreshCcw size={20} /></span><div><h3>Membership access</h3><p>See plan options, included benefits, member-only pricing, signup bonuses, and available treatment choices.</p></div></article>
             </div>
-            <div className="tour-phone"><ProtopiePhone src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Patient Engagement" /></div>
+            <div className="tour-phone"><ProtopiePhone src="https://cloud.protopie.io/p/1f736750cc80f29339722e9a?ui=false&mockup=false&scaleToFit=true&cursorType=touch&handoff=true" title="Patient Engagement" /></div>
             <div className="tour-column">
               <article><span><Gift size={20} /></span><div><h3>Points and rewards</h3><p>Follow point balances, milestones, unlocked offers, expiration windows, and redemption status.</p></div></article>
               <article><span><BellRing size={20} /></span><div><h3>Useful engagement</h3><p>Receive relevant reminders, clinic content, voice messages, and interactive offers.</p></div></article>

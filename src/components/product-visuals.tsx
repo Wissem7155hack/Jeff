@@ -226,16 +226,16 @@ export function ProductShowcase() {
             <ImagePhone src="/imgs/ECOM.webp" alt="Ecommerce preview" />
           )}
           {selected === "mobile-rewards" && (
-            <ProtopiePhone src="https://cloud.protopie.io/p/bbc5dfec037a92153d1995ce?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Mobile Rewards Prototype" />
+            <ProtopiePhone src="https://cloud.protopie.io/p/bbc5dfec037a92153d1995ce?ui=false&mockup=false&scaleToFit=true&cursorType=touch&handoff=true" title="Mobile Rewards Prototype" />
           )}
           {selected === "memberships" && (
-            <ProtopiePhone src="https://cloud.protopie.io/p/c130351e2ef62af898588c52?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Memberships Prototype" />
+            <ProtopiePhone src="https://cloud.protopie.io/p/c130351e2ef62af898588c52?ui=false&mockup=false&scaleToFit=true&cursorType=touch&handoff=true" title="Memberships Prototype" />
           )}
           {selected === "patient-engagement" && (
-            <ProtopiePhone src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Patient Engagement Prototype" />
+            <ProtopiePhone src="https://cloud.protopie.io/p/1f736750cc80f29339722e9a?ui=false&mockup=false&scaleToFit=true&cursorType=touch&handoff=true" title="Home & Automated Offer Prototype" />
           )}
           {selected === "patient-financing" && (
-            <ProtopiePhone src="https://cloud.protopie.io/p/0c14d0a046e20ee0e79234fb?ui=false&mockup=false&scaleToFit=true&cursorType=touch" title="Patient Financing Prototype" />
+            <ProtopiePhone src="https://cloud.protopie.io/p/0c14d0a046e20ee0e79234fb?ui=false&mockup=false&scaleToFit=true&cursorType=touch&handoff=true" title="Patient Financing Prototype" />
           )}
           {selected === "business-intelligence" && (
             <PhoneMockup visual={feature.visual} compact />

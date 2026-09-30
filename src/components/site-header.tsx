@@ -50,6 +50,10 @@ export function SiteHeader() {
     }
   }, [pathname]);
 
+  if (pathname === "/login" || pathname === "/signup") {
+    return null;
+  }
+
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -104,7 +108,7 @@ export function SiteHeader() {
             <Link className={pathname === "/about" || pathname === "/about/" ? "active" : ""} href="/about">Company</Link>
           </nav>
           <div className="header-actions">
-            <a className="login-link" href=" #">Log in</a>
+            <Link className="login-link" href="/login">Log in</Link>
             <Link className="button button-dark button-small" href="/book-demo">Book a demo <span>↗</span></Link>
           </div>
           <button className="menu-toggle" type="button" aria-label={open ? "Close navigation" : "Open navigation"} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
@@ -124,7 +128,7 @@ export function SiteHeader() {
           <Link href="/about">Company <span>↗</span></Link>
           <Link href="/contact">Contact <span>↗</span></Link>
           <div className="mobile-menu-actions">
-            <a className="button button-outline-dark" href=" #">Log in</a>
+            <Link className="button button-outline-dark" href="/login">Log in</Link>
             <Link className="button button-pink" href="/book-demo">Book a demo <span>↗</span></Link>
           </div>
         </nav>

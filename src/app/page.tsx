@@ -53,7 +53,7 @@ export default function HomePage() {
           <div className="product-hero-visual">
             <div className="product-visual-back" />
             <ProtopiePhone
-              src="https://cloud.protopie.io/p/c03b4bd475e6e3ad648e0040?ui=false&scaleToFit=true&enableHotspotHints=true&cursorType=touch"
+              src="https://cloud.protopie.io/p/1f736750cc80f29339722e9a?ui=false&mockup=false&scaleToFit=true&enableHotspotHints=true&cursorType=touch&handoff=true"
               title="Nexcore App Prototype"
               eager
             />

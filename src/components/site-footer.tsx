@@ -1,8 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import { industryNav, solutionNav } from "@/lib/site-data";
 
 export function SiteFooter() {
+  const pathname = usePathname();
+
+  if (pathname === "/login" || pathname === "/signup") {
+    return null;
+  }
+
   return (
     <footer className="site-footer">
       <div className="footer-top">
@@ -44,7 +53,7 @@ export function SiteFooter() {
             <h2>Company</h2>
             <Link href="/about">About Nexcore</Link>
             <Link href="/contact">Contact</Link>
-            <a href="#">Client login</a>
+            <Link href="/login">Client login</Link>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
           </div>
