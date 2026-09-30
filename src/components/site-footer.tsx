@@ -60,7 +60,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2026 Nexcore LLC. All rights reserved.</p>
+        <p>© 2026 Nexcore Solutions LLC. All rights reserved.</p>
         <p>Designed for better patient relationships.</p>
       </div>
     </footer>

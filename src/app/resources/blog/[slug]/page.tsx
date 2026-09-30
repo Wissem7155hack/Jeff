@@ -41,7 +41,7 @@ export default async function BlogPostPage({ params }: Props) {
     headline: post.title,
     description: post.excerpt,
     author: { "@type": "Organization", name: "Nexcore" },
-    publisher: { "@type": "Organization", name: "Nexcore LLC", url: "https://nexcore-app.com" },
+    publisher: { "@type": "Organization", name: "Nexcore Solutions LLC", url: "https://nexcore-app.com" },
     datePublished: post.date,
     image: post.image,
   };
