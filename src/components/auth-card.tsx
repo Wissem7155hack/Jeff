@@ -76,6 +76,10 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
   const [signInErrors, setSignInErrors] = useState<Record<string, string>>({});
   const [signInLoading, setSignInLoading] = useState(false);
   const [authDeniedMessage, setAuthDeniedMessage] = useState("");
+  // 2FA State
+  const [isSecondFactor, setIsSecondFactor] = useState(false);
+  const [secondFactorCode, setSecondFactorCode] = useState("");
+
 
   // Sign Up State
   const [signUpFirst, setSignUpFirst] = useState("");
@@ -103,6 +107,8 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
     setAuthDeniedMessage("");
     setForgotNotice(false);
     setSignUpSuccess(false);
+    setIsSecondFactor(false);
+    setSecondFactorCode("");
   }
 
   // Handle Sign In submission (static credential denial simulation)
@@ -147,6 +153,16 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
           : DASHBOARD_URL;
         window.location.href = redirectUrl;
         return;
+      } else if (res.status === "needs_second_factor") {
+        try {
+          await clerk.client.signIn.prepareSecondFactor({ strategy: "email_code" });
+        } catch (prepErr) {
+          console.warn("Second factor preparation:", prepErr);
+        }
+        setIsSecondFactor(true);
+        setSignInLoading(false);
+        setAuthDeniedMessage("");
+        return;
       } else {
         setSignInLoading(false);
         setAuthDeniedMessage(`Authentication status: ${res.status}. Additional verification required.`);
@@ -159,6 +175,57 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
         err?.message ||
         "Invalid credentials. Please verify your email and password.";
       setAuthDeniedMessage(errMsg);
+    }
+  }
+
+  
+  // Handle 2FA verification submission
+  async function handleVerifySecondFactor(e: React.FormEvent) {
+    e.preventDefault();
+    if (!secondFactorCode.trim()) {
+      setAuthDeniedMessage("Please enter the 6-digit code sent to your email.");
+      return;
+    }
+
+    setSignInLoading(true);
+    setAuthDeniedMessage("");
+
+    try {
+      const clerk: any = await getClerkClient();
+      const res = await clerk.client.signIn.attemptSecondFactor({
+        strategy: "email_code",
+        code: secondFactorCode.trim(),
+      });
+
+      if (res.status === "complete") {
+        await clerk.setActive({ session: res.createdSessionId });
+        const redirectUrl = clerk.buildUrlWithAuth
+          ? clerk.buildUrlWithAuth(DASHBOARD_URL)
+          : DASHBOARD_URL;
+        window.location.href = redirectUrl;
+        return;
+      } else {
+        setSignInLoading(false);
+        setAuthDeniedMessage(`Verification status: ${res.status}. Please check the code and try again.`);
+      }
+    } catch (err: any) {
+      setSignInLoading(false);
+      const errMsg =
+        err?.errors?.[0]?.longMessage ||
+        err?.errors?.[0]?.message ||
+        err?.message ||
+        "Invalid or expired verification code. Please check your email.";
+      setAuthDeniedMessage(errMsg);
+    }
+  }
+
+  async function handleResendSecondFactor() {
+    try {
+      const clerk: any = await getClerkClient();
+      await clerk.client.signIn.prepareSecondFactor({ strategy: "email_code" });
+      setAuthDeniedMessage("A new verification code was sent to your email.");
+    } catch (err: any) {
+      setAuthDeniedMessage("Failed to resend code. Please try again in a few moments.");
     }
   }
 
@@ -271,6 +338,73 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
               Return to Nexcore website ↗
             </Link>
           </div>
+        ) : mode === "signin" && isSecondFactor ? (
+          /* ================= TWO-FACTOR VERIFICATION FORM ================= */
+          <form className="auth-form" onSubmit={handleVerifySecondFactor} noValidate>
+            <div className="auth-header">
+              <h1>Verify your identity</h1>
+              <p>Enter the 6-digit verification code sent to <strong>{signInEmail}</strong></p>
+            </div>
+
+            {authDeniedMessage && (
+              <div className="auth-denial-alert" role="alert">
+                {authDeniedMessage}
+              </div>
+            )}
+
+            <div className="auth-field">
+              <label htmlFor="2fa-code">Verification Code</label>
+              <input
+                id="2fa-code"
+                type="text"
+                maxLength={6}
+                placeholder="123456"
+                autoComplete="one-time-code"
+                value={secondFactorCode}
+                onChange={(e) => {
+                  setSecondFactorCode(e.target.value);
+                  if (authDeniedMessage) setAuthDeniedMessage("");
+                }}
+                style={{ textAlign: "center", letterSpacing: "0.25em", fontSize: "1.25rem", fontWeight: "bold" }}
+                autoFocus
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="auth-btn-primary"
+              disabled={signInLoading || !secondFactorCode.trim()}
+            >
+              {signInLoading ? (
+                <>
+                  <LoaderCircle className="spin" size={17} /> Verifying...
+                </>
+              ) : (
+                "Verify & Continue"
+              )}
+            </button>
+
+            <div className="auth-row-between" style={{ marginTop: "14px" }}>
+              <button
+                type="button"
+                className="auth-link-pink"
+                onClick={() => {
+                  setIsSecondFactor(false);
+                  setSecondFactorCode("");
+                  setAuthDeniedMessage("");
+                }}
+              >
+                ← Back to sign in
+              </button>
+              <button
+                type="button"
+                className="auth-link-pink"
+                onClick={handleResendSecondFactor}
+              >
+                Resend code
+              </button>
+            </div>
+          </form>
         ) : mode === "signin" ? (
           /* ================= SIGN IN FORM ================= */
           <form className="auth-form" onSubmit={handleSignIn} noValidate>
