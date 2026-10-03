@@ -1,11 +1,59 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff, LoaderCircle, CheckCircle2, ArrowLeft } from "lucide-react";
 
 interface AuthCardProps {
   initialMode?: "signin" | "signup";
+}
+
+
+const CLERK_PUBLISHABLE_KEY = "pk_test_bWFqb3ItbWFuYXRlZS00OTkxLmNsZXJrLmFjY291bnRzLmRldiQ";
+const DASHBOARD_URL = "https://admin.nexcore-app.com";
+
+async function getClerkClient(): Promise<any> {
+  if (typeof window === "undefined") return null;
+  if ((window as any).Clerk) {
+    const clerk = (window as any).Clerk;
+    if (!clerk.loaded) {
+      await clerk.load();
+    }
+    return clerk;
+  }
+
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[src*="@clerk/clerk-js"]');
+    if (existing) {
+      existing.addEventListener('load', async () => {
+        try {
+          const clerk = (window as any).Clerk;
+          await clerk.load();
+          resolve(clerk);
+        } catch (e) {
+          reject(e);
+        }
+      });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://major-manatee-4991.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js";
+    script.setAttribute("data-clerk-publishable-key", CLERK_PUBLISHABLE_KEY);
+    script.crossOrigin = "anonymous";
+    script.async = true;
+    script.onload = async () => {
+      try {
+        const clerk = (window as any).Clerk;
+        await clerk.load();
+        resolve(clerk);
+      } catch (err) {
+        reject(err);
+      }
+    };
+    script.onerror = () => reject(new Error("Authentication service failed to load"));
+    document.head.appendChild(script);
+  });
 }
 
 export function NexcoreRobotLogo() {
@@ -37,6 +85,16 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
   const [signUpErrors, setSignUpErrors] = useState<Record<string, string>>({});
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
+
+  useEffect(() => {
+    getClerkClient().then((clerk: any) => {
+      if (clerk && clerk.user) {
+        const url = clerk.buildUrlWithAuth ? clerk.buildUrlWithAuth(DASHBOARD_URL) : DASHBOARD_URL;
+        window.location.href = url;
+      }
+    }).catch(() => {});
+  }, []);
+
 
   function switchMode(newMode: "signin" | "signup") {
     setMode(newMode);
@@ -71,13 +129,37 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
     setSignInErrors({});
     setSignInLoading(true);
 
-    // Realistic authentication attempt delay, then reject any credentials
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    try {
+      const clerk: any = await getClerkClient();
+      if (!clerk) {
+        throw new Error("Authentication system failed to initialize. Please refresh.");
+      }
 
-    setSignInLoading(false);
-    setAuthDeniedMessage(
-      "Invalid credentials. Nexcore portal access is restricted to verified partner accounts. Please check your credentials or create an account."
-    );
+      const res = await clerk.client.signIn.create({
+        identifier: signInEmail.trim(),
+        password: signInPassword,
+      });
+
+      if (res.status === "complete") {
+        await clerk.setActive({ session: res.createdSessionId });
+        const redirectUrl = clerk.buildUrlWithAuth
+          ? clerk.buildUrlWithAuth(DASHBOARD_URL)
+          : DASHBOARD_URL;
+        window.location.href = redirectUrl;
+        return;
+      } else {
+        setSignInLoading(false);
+        setAuthDeniedMessage(`Authentication status: ${res.status}. Additional verification required.`);
+      }
+    } catch (err: any) {
+      setSignInLoading(false);
+      const errMsg =
+        err?.errors?.[0]?.longMessage ||
+        err?.errors?.[0]?.message ||
+        err?.message ||
+        "Invalid credentials. Please verify your email and password.";
+      setAuthDeniedMessage(errMsg);
+    }
   }
 
   // Handle Sign Up submission (send via Web3Forms and display sweet message)
