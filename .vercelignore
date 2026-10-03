@@ -1,0 +1,11 @@
+.git
+.github
+.agents
+.mimocode
+imgs
+seo-framework
+out
+.next
+node_modules
+*.tsbuildinfo
+*.log
