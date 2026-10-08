@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Eye, EyeOff, LoaderCircle, CheckCircle2, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle, CheckCircle2, ArrowLeft, ShieldAlert } from "lucide-react";
 
 interface AuthCardProps {
   initialMode?: "signin" | "signup";
 }
-
 
 const CLERK_PUBLISHABLE_KEY = "pk_test_bWFqb3ItbWFuYXRlZS00OTkxLmNsZXJrLmFjY291bnRzLmRldiQ";
 const DASHBOARD_URL = "https://admin.nexcore-app.com";
@@ -58,9 +57,9 @@ async function getClerkClient(): Promise<any> {
 
 export function NexcoreRobotLogo() {
   return (
-
-    <center><span className="auth-logo-text">Nexcore</span></center>
-
+    <center>
+      <span className="auth-logo-text">Nexcore</span>
+    </center>
   );
 }
 
@@ -68,7 +67,6 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
   const [mode, setMode] = useState<"signin" | "signup">(initialMode);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [forgotNotice, setForgotNotice] = useState(false);
 
   // Sign In State
   const [signInEmail, setSignInEmail] = useState("");
@@ -76,10 +74,23 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
   const [signInErrors, setSignInErrors] = useState<Record<string, string>>({});
   const [signInLoading, setSignInLoading] = useState(false);
   const [authDeniedMessage, setAuthDeniedMessage] = useState("");
+  const [isBreachedPasswordError, setIsBreachedPasswordError] = useState(false);
+
   // 2FA State
   const [isSecondFactor, setIsSecondFactor] = useState(false);
   const [secondFactorCode, setSecondFactorCode] = useState("");
 
+  // Forgot Password / Password Reset State
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [resetStep, setResetStep] = useState<"request" | "verify">("request");
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetCode, setResetCode] = useState("");
+  const [resetNewPassword, setResetNewPassword] = useState("");
+  const [resetConfirmPassword, setResetConfirmPassword] = useState("");
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetMessage, setResetMessage] = useState("");
+  const [resetErrors, setResetErrors] = useState<Record<string, string>>({});
 
   // Sign Up State
   const [signUpFirst, setSignUpFirst] = useState("");
@@ -91,30 +102,49 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
   const [signUpSuccess, setSignUpSuccess] = useState(false);
 
   useEffect(() => {
-    getClerkClient().then((clerk: any) => {
-      if (clerk && clerk.user) {
-        const url = clerk.buildUrlWithAuth ? clerk.buildUrlWithAuth(DASHBOARD_URL) : DASHBOARD_URL;
-        window.location.href = url;
-      }
-    }).catch(() => {});
+    getClerkClient()
+      .then((clerk: any) => {
+        if (clerk && clerk.user) {
+          const url = clerk.buildUrlWithAuth ? clerk.buildUrlWithAuth(DASHBOARD_URL) : DASHBOARD_URL;
+          window.location.href = url;
+        }
+      })
+      .catch(() => {});
   }, []);
-
 
   function switchMode(newMode: "signin" | "signup") {
     setMode(newMode);
     setSignInErrors({});
     setSignUpErrors({});
     setAuthDeniedMessage("");
-    setForgotNotice(false);
+    setIsBreachedPasswordError(false);
     setSignUpSuccess(false);
     setIsSecondFactor(false);
     setSecondFactorCode("");
+    setIsForgotPassword(false);
+    setResetStep("request");
+    setResetErrors({});
+    setResetMessage("");
   }
 
-  // Handle Sign In submission (static credential denial simulation)
+  function startForgotPassword(prefillEmail?: string) {
+    setIsForgotPassword(true);
+    setResetStep("request");
+    setResetEmail(prefillEmail || signInEmail || "");
+    setResetCode("");
+    setResetNewPassword("");
+    setResetConfirmPassword("");
+    setResetMessage("");
+    setResetErrors({});
+    setAuthDeniedMessage("");
+    setIsBreachedPasswordError(false);
+  }
+
+  // Handle Sign In submission
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault();
     setAuthDeniedMessage("");
+    setIsBreachedPasswordError(false);
     const errs: Record<string, string> = {};
 
     if (!signInEmail.trim()) {
@@ -169,16 +199,29 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
       }
     } catch (err: any) {
       setSignInLoading(false);
+      const code = err?.errors?.[0]?.code;
       const errMsg =
         err?.errors?.[0]?.longMessage ||
         err?.errors?.[0]?.message ||
         err?.message ||
         "Invalid credentials. Please verify your email and password.";
-      setAuthDeniedMessage(errMsg);
+
+      if (
+        code === "form_password_pwned" ||
+        errMsg.toLowerCase().includes("data breach") ||
+        errMsg.toLowerCase().includes("breach")
+      ) {
+        setIsBreachedPasswordError(true);
+        setAuthDeniedMessage(
+          "This password was flagged in an online data breach for account safety. Please reset your password below to regain instant access."
+        );
+      } else {
+        setIsBreachedPasswordError(false);
+        setAuthDeniedMessage(errMsg);
+      }
     }
   }
 
-  
   // Handle 2FA verification submission
   async function handleVerifySecondFactor(e: React.FormEvent) {
     e.preventDefault();
@@ -224,12 +267,145 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
       const clerk: any = await getClerkClient();
       await clerk.client.signIn.prepareSecondFactor({ strategy: "email_code" });
       setAuthDeniedMessage("A new verification code was sent to your email.");
-    } catch (err: any) {
+    } catch {
       setAuthDeniedMessage("Failed to resend code. Please try again in a few moments.");
     }
   }
 
-  // Handle Sign Up submission (send via Web3Forms and display sweet message)
+  // Handle Password Reset: Step 1 (Send Code)
+  async function handleSendResetCode(e: React.FormEvent) {
+    e.preventDefault();
+    setResetMessage("");
+    const errs: Record<string, string> = {};
+
+    if (!resetEmail.trim()) {
+      errs.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(resetEmail.trim())) {
+      errs.email = "Please enter a valid email address";
+    }
+
+    if (Object.keys(errs).length > 0) {
+      setResetErrors(errs);
+      return;
+    }
+
+    setResetErrors({});
+    setResetLoading(true);
+
+    try {
+      const clerk: any = await getClerkClient();
+      if (!clerk) {
+        throw new Error("Authentication system failed to initialize. Please refresh.");
+      }
+
+      await clerk.client.signIn.create({
+        strategy: "reset_password_email_code",
+        identifier: resetEmail.trim(),
+      });
+
+      setResetStep("verify");
+      setResetLoading(false);
+      setResetMessage(`A 6-digit verification code has been sent to ${resetEmail.trim()}. Check your inbox!`);
+    } catch (err: any) {
+      setResetLoading(false);
+      const errMsg =
+        err?.errors?.[0]?.longMessage ||
+        err?.errors?.[0]?.message ||
+        err?.message ||
+        "Could not initiate password reset. Please check the email and try again.";
+      setResetErrors({ form: errMsg });
+    }
+  }
+
+  // Handle Password Reset: Step 2 (Verify Code & Set New Password)
+  async function handleVerifyResetPassword(e: React.FormEvent) {
+    e.preventDefault();
+    setResetMessage("");
+    const errs: Record<string, string> = {};
+
+    if (!resetCode.trim()) {
+      errs.code = "Verification code is required";
+    } else if (resetCode.trim().length !== 6) {
+      errs.code = "Code must be 6 digits";
+    }
+
+    if (!resetNewPassword) {
+      errs.password = "New password is required";
+    } else if (resetNewPassword.length < 8) {
+      errs.password = "Password must be at least 8 characters";
+    }
+
+    if (resetNewPassword !== resetConfirmPassword) {
+      errs.confirmPassword = "Passwords do not match";
+    }
+
+    if (Object.keys(errs).length > 0) {
+      setResetErrors(errs);
+      return;
+    }
+
+    setResetErrors({});
+    setResetLoading(true);
+
+    try {
+      const clerk: any = await getClerkClient();
+      if (!clerk) {
+        throw new Error("Authentication system failed to initialize. Please refresh.");
+      }
+
+      const res = await clerk.client.signIn.attemptFirstFactor({
+        strategy: "reset_password_email_code",
+        code: resetCode.trim(),
+        password: resetNewPassword,
+      });
+
+      if (res.status === "complete") {
+        await clerk.setActive({ session: res.createdSessionId });
+        const redirectUrl = clerk.buildUrlWithAuth
+          ? clerk.buildUrlWithAuth(DASHBOARD_URL)
+          : DASHBOARD_URL;
+        window.location.href = redirectUrl;
+        return;
+      } else if (res.status === "needs_second_factor") {
+        try {
+          await clerk.client.signIn.prepareSecondFactor({ strategy: "email_code" });
+        } catch (prepErr) {
+          console.warn("Second factor preparation:", prepErr);
+        }
+        setIsForgotPassword(false);
+        setIsSecondFactor(true);
+        setSignInLoading(false);
+        setAuthDeniedMessage("");
+        return;
+      } else {
+        setResetLoading(false);
+        setResetErrors({ form: `Verification status: ${res.status}. Additional step required.` });
+      }
+    } catch (err: any) {
+      setResetLoading(false);
+      const errMsg =
+        err?.errors?.[0]?.longMessage ||
+        err?.errors?.[0]?.message ||
+        err?.message ||
+        "Failed to update password. Please verify the 6-digit code or choose a stronger password.";
+      setResetErrors({ form: errMsg });
+    }
+  }
+
+  async function handleResendResetCode() {
+    setResetMessage("");
+    try {
+      const clerk: any = await getClerkClient();
+      await clerk.client.signIn.prepareFirstFactor({
+        strategy: "reset_password_email_code",
+      });
+      setResetMessage("A new verification code has been dispatched to your email address.");
+    } catch {
+      setResetErrors({ form: "Failed to resend code. Please wait a moment and try again." });
+    }
+  }
+
+  // Handle Sign Up submission
   async function handleSignUp(e: React.FormEvent) {
     e.preventDefault();
     const errs: Record<string, string> = {};
@@ -287,7 +463,6 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
       setSignUpLoading(false);
       setSignUpSuccess(true);
     } catch {
-      // Still show sweet success so client test flow is uninterrupted even if offline
       setSignUpLoading(false);
       setSignUpSuccess(true);
     }
@@ -405,6 +580,204 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
               </button>
             </div>
           </form>
+        ) : mode === "signin" && isForgotPassword ? (
+          /* ================= PASSWORD RESET FLOW ================= */
+          resetStep === "request" ? (
+            <form className="auth-form" onSubmit={handleSendResetCode} noValidate>
+              <div className="auth-header">
+                <h1>Reset your password</h1>
+                <p>Enter your clinic administrator email to receive a 6-digit reset code.</p>
+              </div>
+
+              {resetErrors.form && (
+                <div className="auth-denial-alert" role="alert">
+                  {resetErrors.form}
+                </div>
+              )}
+
+              <div className="auth-field">
+                <label htmlFor="reset-email">Email Address</label>
+                <input
+                  id="reset-email"
+                  type="email"
+                  placeholder="admin@nexcore-app.com"
+                  autoComplete="email"
+                  value={resetEmail}
+                  onChange={(e) => {
+                    setResetEmail(e.target.value);
+                    if (resetErrors.email) setResetErrors((prev) => ({ ...prev, email: "" }));
+                    if (resetErrors.form) setResetErrors((prev) => ({ ...prev, form: "" }));
+                  }}
+                  className={resetErrors.email ? "input-has-error" : ""}
+                  autoFocus
+                />
+                {resetErrors.email && (
+                  <span className="auth-error-text">{resetErrors.email}</span>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className="auth-btn-primary"
+                disabled={resetLoading}
+              >
+                {resetLoading ? (
+                  <>
+                    <LoaderCircle className="spin" size={17} /> Sending code...
+                  </>
+                ) : (
+                  "Send verification code"
+                )}
+              </button>
+
+              <div className="auth-row-between" style={{ marginTop: "16px" }}>
+                <button
+                  type="button"
+                  className="auth-link-pink"
+                  onClick={() => {
+                    setIsForgotPassword(false);
+                    setAuthDeniedMessage("");
+                    setIsBreachedPasswordError(false);
+                  }}
+                >
+                  ← Back to sign in
+                </button>
+                <a
+                  href="mailto:support@nexcore-app.com"
+                  className="auth-link-pink"
+                  style={{ fontSize: "12px", color: "#9ca3af", fontWeight: 400 }}
+                >
+                  Contact support
+                </a>
+              </div>
+            </form>
+          ) : (
+            <form className="auth-form" onSubmit={handleVerifyResetPassword} noValidate>
+              <div className="auth-header">
+                <h1>Set new password</h1>
+                <p>Enter the 6-digit code sent to <strong>{resetEmail}</strong> and your new password.</p>
+              </div>
+
+              {resetMessage && (
+                <div className="auth-success-alert" role="status">
+                  {resetMessage}
+                </div>
+              )}
+
+              {resetErrors.form && (
+                <div className="auth-denial-alert" role="alert">
+                  {resetErrors.form}
+                </div>
+              )}
+
+              <div className="auth-field">
+                <label htmlFor="reset-code">6-Digit Verification Code</label>
+                <input
+                  id="reset-code"
+                  type="text"
+                  maxLength={6}
+                  placeholder="123456"
+                  autoComplete="one-time-code"
+                  value={resetCode}
+                  onChange={(e) => {
+                    setResetCode(e.target.value);
+                    if (resetErrors.code) setResetErrors((prev) => ({ ...prev, code: "" }));
+                    if (resetErrors.form) setResetErrors((prev) => ({ ...prev, form: "" }));
+                  }}
+                  style={{ textAlign: "center", letterSpacing: "0.25em", fontSize: "1.25rem", fontWeight: "bold" }}
+                  className={resetErrors.code ? "input-has-error" : ""}
+                  autoFocus
+                />
+                {resetErrors.code && (
+                  <span className="auth-error-text">{resetErrors.code}</span>
+                )}
+              </div>
+
+              <div className="auth-field">
+                <label htmlFor="reset-new-password">New Password</label>
+                <div className="auth-input-password-wrap">
+                  <input
+                    id="reset-new-password"
+                    type={showResetPassword ? "text" : "password"}
+                    placeholder="Minimum 8 characters"
+                    autoComplete="new-password"
+                    value={resetNewPassword}
+                    onChange={(e) => {
+                      setResetNewPassword(e.target.value);
+                      if (resetErrors.password) setResetErrors((prev) => ({ ...prev, password: "" }));
+                      if (resetErrors.form) setResetErrors((prev) => ({ ...prev, form: "" }));
+                    }}
+                    className={resetErrors.password ? "input-has-error" : ""}
+                  />
+                  <button
+                    type="button"
+                    className="auth-eye-btn"
+                    onClick={() => setShowResetPassword(!showResetPassword)}
+                    aria-label={showResetPassword ? "Hide password" : "Show password"}
+                  >
+                    {showResetPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                {resetErrors.password && (
+                  <span className="auth-error-text">{resetErrors.password}</span>
+                )}
+              </div>
+
+              <div className="auth-field">
+                <label htmlFor="reset-confirm-password">Confirm New Password</label>
+                <input
+                  id="reset-confirm-password"
+                  type={showResetPassword ? "text" : "password"}
+                  placeholder="Re-enter your new password"
+                  autoComplete="new-password"
+                  value={resetConfirmPassword}
+                  onChange={(e) => {
+                    setResetConfirmPassword(e.target.value);
+                    if (resetErrors.confirmPassword) setResetErrors((prev) => ({ ...prev, confirmPassword: "" }));
+                    if (resetErrors.form) setResetErrors((prev) => ({ ...prev, form: "" }));
+                  }}
+                  className={resetErrors.confirmPassword ? "input-has-error" : ""}
+                />
+                {resetErrors.confirmPassword && (
+                  <span className="auth-error-text">{resetErrors.confirmPassword}</span>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className="auth-btn-primary"
+                disabled={resetLoading || !resetCode.trim() || !resetNewPassword}
+              >
+                {resetLoading ? (
+                  <>
+                    <LoaderCircle className="spin" size={17} /> Updating password...
+                  </>
+                ) : (
+                  "Reset password & sign in"
+                )}
+              </button>
+
+              <div className="auth-row-between" style={{ marginTop: "16px" }}>
+                <button
+                  type="button"
+                  className="auth-link-pink"
+                  onClick={() => {
+                    setIsForgotPassword(false);
+                    setAuthDeniedMessage("");
+                  }}
+                >
+                  ← Back to sign in
+                </button>
+                <button
+                  type="button"
+                  className="auth-link-pink"
+                  onClick={handleResendResetCode}
+                >
+                  Resend code
+                </button>
+              </div>
+            </form>
+          )
         ) : mode === "signin" ? (
           /* ================= SIGN IN FORM ================= */
           <form className="auth-form" onSubmit={handleSignIn} noValidate>
@@ -415,7 +788,23 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
 
             {authDeniedMessage && (
               <div className="auth-denial-alert" role="alert">
-                {authDeniedMessage}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                  {isBreachedPasswordError && (
+                    <ShieldAlert size={18} style={{ flexShrink: 0, marginTop: "2px" }} />
+                  )}
+                  <div style={{ flex: 1 }}>
+                    <p style={{ margin: 0 }}>{authDeniedMessage}</p>
+                    {isBreachedPasswordError && (
+                      <button
+                        type="button"
+                        className="auth-alert-action-btn"
+                        onClick={() => startForgotPassword(signInEmail)}
+                      >
+                        Reset password via email code →
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
 
@@ -432,7 +821,10 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
                   if (signInErrors.email) {
                     setSignInErrors((prev) => ({ ...prev, email: "" }));
                   }
-                  if (authDeniedMessage) setAuthDeniedMessage("");
+                  if (authDeniedMessage) {
+                    setAuthDeniedMessage("");
+                    setIsBreachedPasswordError(false);
+                  }
                 }}
                 className={signInErrors.email ? "input-has-error" : ""}
               />
@@ -455,7 +847,10 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
                     if (signInErrors.password) {
                       setSignInErrors((prev) => ({ ...prev, password: "" }));
                     }
-                    if (authDeniedMessage) setAuthDeniedMessage("");
+                    if (authDeniedMessage) {
+                      setAuthDeniedMessage("");
+                      setIsBreachedPasswordError(false);
+                    }
                   }}
                   className={signInErrors.password ? "input-has-error" : ""}
                 />
@@ -485,18 +880,11 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
               <button
                 type="button"
                 className="auth-link-pink"
-                onClick={() => setForgotNotice(!forgotNotice)}
+                onClick={() => startForgotPassword(signInEmail)}
               >
                 Forgot password?
               </button>
             </div>
-
-            {forgotNotice && (
-              <div className="auth-notice-box">
-                Password reset instructions are sent to authorized clinic administrators. For help, contact{" "}
-                <a href="mailto:support@nexcore-app.com">support@nexcore-app.com</a>.
-              </div>
-            )}
 
             <button
               type="submit"
