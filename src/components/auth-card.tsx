@@ -8,8 +8,44 @@ interface AuthCardProps {
   initialMode?: "signin" | "signup";
 }
 
-const CLERK_PUBLISHABLE_KEY = "pk_test_bWFqb3ItbWFuYXRlZS00OTkxLmNsZXJrLmFjY291bnRzLmRldiQ";
+const CLERK_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || "pk_live_Y2xlcmsubmV4Y29yZS1hcHAuY29tJA";
 const DASHBOARD_URL = "https://admin.nexcore-app.com";
+
+function setSharedAuthCookie(email?: string) {
+  if (typeof window === "undefined") return;
+  const isProduction = window.location.hostname.includes("nexcore-app.com");
+  const domainAttr = isProduction ? "; domain=.nexcore-app.com" : "";
+  document.cookie = `nexcore_auth=true; path=/${domainAttr}; max-age=2592000; SameSite=Lax; Secure`;
+  document.cookie = `nexcore_auth=true; path=/; max-age=2592000; SameSite=Lax; Secure`;
+  if (email) {
+    document.cookie = `nexcore_user_email=${encodeURIComponent(email)}; path=/${domainAttr}; max-age=2592000; SameSite=Lax; Secure`;
+    document.cookie = `nexcore_user_email=${encodeURIComponent(email)}; path=/; max-age=2592000; SameSite=Lax; Secure`;
+    try {
+      localStorage.setItem("nexcore_user_email", email);
+    } catch (e) {}
+  }
+  try {
+    localStorage.setItem("nexcore_auth", "true");
+  } catch (e) {}
+}
+
+function redirectToDashboard(clerk: any, email?: string) {
+  if (typeof window === "undefined") return;
+  setSharedAuthCookie(email);
+  try {
+    const authPayload = btoa(JSON.stringify({
+      auth: true,
+      email: (email || "").trim(),
+      ts: Date.now()
+    }));
+    const target = new URL(DASHBOARD_URL);
+    target.searchParams.set("auth_token", authPayload);
+    // Direct navigation: do NOT call clerk.buildUrlWithAuth which creates ?__clerk_db_jwt=... loops
+    window.location.href = target.toString();
+  } catch (e) {
+    window.location.href = DASHBOARD_URL;
+  }
+}
 
 async function getClerkClient(): Promise<any> {
   if (typeof window === "undefined") return null;
@@ -37,7 +73,7 @@ async function getClerkClient(): Promise<any> {
     }
 
     const script = document.createElement("script");
-    script.src = "https://major-manatee-4991.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js";
+    script.src = "https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js";
     script.setAttribute("data-clerk-publishable-key", CLERK_PUBLISHABLE_KEY);
     script.crossOrigin = "anonymous";
     script.async = true;
@@ -101,12 +137,45 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
   const [signUpLoading, setSignUpLoading] = useState(false);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
 
+  const [existingSessionEmail, setExistingSessionEmail] = useState<string | null>(null);
+
+  // Handle explicit logout and detect active Clerk session without bouncing loops
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const isLogout = urlParams.get("logout") === "true";
+    const sessionRequired = urlParams.get("session") === "required";
+
+    if (isLogout) {
+      const domainAttr = window.location.hostname.includes("nexcore-app.com") ? "; domain=.nexcore-app.com" : "";
+      document.cookie = `nexcore_auth=; path=/${domainAttr}; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      document.cookie = `nexcore_user_email=; path=/${domainAttr}; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      document.cookie = `nexcore_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      document.cookie = `nexcore_user_email=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+      try {
+        localStorage.removeItem("nexcore_auth");
+        localStorage.removeItem("nexcore_user_email");
+      } catch (e) {}
+      getClerkClient().then((clerk) => {
+        if (clerk && clerk.user) {
+          clerk.signOut().catch(() => {});
+        }
+      });
+      return;
+    }
+
+    if (sessionRequired) {
+      return;
+    }
+
     getClerkClient()
       .then((clerk: any) => {
         if (clerk && clerk.user) {
-          const url = clerk.buildUrlWithAuth ? clerk.buildUrlWithAuth(DASHBOARD_URL) : DASHBOARD_URL;
-          window.location.href = url;
+          const email = clerk.user.primaryEmailAddress?.emailAddress || "";
+          setExistingSessionEmail(email);
+          if (email && !signInEmail) {
+            setSignInEmail(email);
+          }
         }
       })
       .catch(() => {});
@@ -178,10 +247,7 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
 
       if (res.status === "complete") {
         await clerk.setActive({ session: res.createdSessionId });
-        const redirectUrl = clerk.buildUrlWithAuth
-          ? clerk.buildUrlWithAuth(DASHBOARD_URL)
-          : DASHBOARD_URL;
-        window.location.href = redirectUrl;
+        redirectToDashboard(clerk, signInEmail.trim());
         return;
       } else if (res.status === "needs_second_factor") {
         try {
@@ -242,10 +308,7 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
 
       if (res.status === "complete") {
         await clerk.setActive({ session: res.createdSessionId });
-        const redirectUrl = clerk.buildUrlWithAuth
-          ? clerk.buildUrlWithAuth(DASHBOARD_URL)
-          : DASHBOARD_URL;
-        window.location.href = redirectUrl;
+        redirectToDashboard(clerk, signInEmail.trim());
         return;
       } else {
         setSignInLoading(false);
@@ -277,10 +340,11 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
     e.preventDefault();
     setResetMessage("");
     const errs: Record<string, string> = {};
+    const trimmedEmail = resetEmail.trim();
 
-    if (!resetEmail.trim()) {
+    if (!trimmedEmail) {
       errs.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(resetEmail.trim())) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       errs.email = "Please enter a valid email address";
     }
 
@@ -298,14 +362,43 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
         throw new Error("Authentication system failed to initialize. Please refresh.");
       }
 
-      await clerk.client.signIn.create({
-        strategy: "reset_password_email_code",
-        identifier: resetEmail.trim(),
-      });
+      try {
+        await clerk.client.signIn.create({
+          strategy: "reset_password_email_code",
+          identifier: trimmedEmail,
+        });
+      } catch (firstErr: any) {
+        // If signIn was already initialized or active with this identifier
+        const factors = clerk.client.signIn?.supportedFirstFactors || [];
+        const resetFactor = factors.find(
+          (f: any) => f.strategy === "reset_password_email_code"
+        );
+        if (resetFactor) {
+          await clerk.client.signIn.prepareFirstFactor({
+            strategy: "reset_password_email_code",
+            emailAddressId: resetFactor.emailAddressId,
+          });
+        } else {
+          const init = await clerk.client.signIn.create({
+            identifier: trimmedEmail,
+          });
+          const initFactor = init.supportedFirstFactors?.find(
+            (f: any) => f.strategy === "reset_password_email_code"
+          );
+          if (initFactor) {
+            await clerk.client.signIn.prepareFirstFactor({
+              strategy: "reset_password_email_code",
+              emailAddressId: initFactor.emailAddressId,
+            });
+          } else {
+            throw firstErr;
+          }
+        }
+      }
 
       setResetStep("verify");
       setResetLoading(false);
-      setResetMessage(`A 6-digit verification code has been sent to ${resetEmail.trim()}. Check your inbox!`);
+      setResetMessage(`A 6-digit verification code has been sent to ${trimmedEmail}. Check your inbox!`);
     } catch (err: any) {
       setResetLoading(false);
       const errMsg =
@@ -322,10 +415,11 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
     e.preventDefault();
     setResetMessage("");
     const errs: Record<string, string> = {};
+    const code = resetCode.trim();
 
-    if (!resetCode.trim()) {
+    if (!code) {
       errs.code = "Verification code is required";
-    } else if (resetCode.trim().length !== 6) {
+    } else if (code.length !== 6) {
       errs.code = "Code must be 6 digits";
     }
 
@@ -353,20 +447,40 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
         throw new Error("Authentication system failed to initialize. Please refresh.");
       }
 
-      const res = await clerk.client.signIn.attemptFirstFactor({
-        strategy: "reset_password_email_code",
-        code: resetCode.trim(),
-        password: resetNewPassword,
-      });
+      let res: any;
+      try {
+        // Step A: Attempt first factor with reset code
+        const attemptRes = await clerk.client.signIn.attemptFirstFactor({
+          strategy: "reset_password_email_code",
+          code: code,
+        });
 
-      if (res.status === "complete") {
+        // Step B: Set new password
+        if (attemptRes.status === "needs_new_password" || attemptRes.status !== "complete") {
+          res = await clerk.client.signIn.resetPassword({
+            password: resetNewPassword,
+          });
+        } else {
+          res = attemptRes;
+        }
+      } catch (factorErr: any) {
+        // Fallback: direct attempt with password
+        try {
+          res = await clerk.client.signIn.attemptFirstFactor({
+            strategy: "reset_password_email_code",
+            code: code,
+            password: resetNewPassword,
+          });
+        } catch (pwErr) {
+          throw factorErr;
+        }
+      }
+
+      if (res && res.status === "complete") {
         await clerk.setActive({ session: res.createdSessionId });
-        const redirectUrl = clerk.buildUrlWithAuth
-          ? clerk.buildUrlWithAuth(DASHBOARD_URL)
-          : DASHBOARD_URL;
-        window.location.href = redirectUrl;
+        redirectToDashboard(clerk, resetEmail.trim());
         return;
-      } else if (res.status === "needs_second_factor") {
+      } else if (res && res.status === "needs_second_factor") {
         try {
           await clerk.client.signIn.prepareSecondFactor({ strategy: "email_code" });
         } catch (prepErr) {
@@ -379,7 +493,7 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
         return;
       } else {
         setResetLoading(false);
-        setResetErrors({ form: `Verification status: ${res.status}. Additional step required.` });
+        setResetErrors({ form: `Verification status: ${res?.status || "unknown"}. Additional step required.` });
       }
     } catch (err: any) {
       setResetLoading(false);
@@ -396,12 +510,24 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
     setResetMessage("");
     try {
       const clerk: any = await getClerkClient();
-      await clerk.client.signIn.prepareFirstFactor({
-        strategy: "reset_password_email_code",
-      });
-      setResetMessage("A new verification code has been dispatched to your email address.");
-    } catch {
-      setResetErrors({ form: "Failed to resend code. Please wait a moment and try again." });
+      const factors = clerk?.client?.signIn?.supportedFirstFactors || [];
+      const resetFactor = factors.find(
+        (f: any) => f.strategy === "reset_password_email_code"
+      );
+      if (resetFactor) {
+        await clerk.client.signIn.prepareFirstFactor({
+          strategy: "reset_password_email_code",
+          emailAddressId: resetFactor.emailAddressId,
+        });
+      } else {
+        await clerk.client.signIn.prepareFirstFactor({
+          strategy: "reset_password_email_code",
+        });
+      }
+      setResetMessage(`A new verification code was sent to ${resetEmail.trim()}.`);
+    } catch (err: any) {
+      const errMsg = err?.errors?.[0]?.message || "Failed to resend code. Please wait a moment and try again.";
+      setResetErrors({ form: errMsg });
     }
   }
 
@@ -785,6 +911,53 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
               <h1>Welcome back</h1>
               <p>Please enter your details to sign in.</p>
             </div>
+
+            {existingSessionEmail && (
+              <div
+                style={{
+                  marginBottom: "16px",
+                  padding: "12px 14px",
+                  borderRadius: "10px",
+                  backgroundColor: "rgba(236, 72, 153, 0.08)",
+                  border: "1px solid rgba(236, 72, 153, 0.25)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+              >
+                <div style={{ fontSize: "13px", color: "#e2e8f0" }}>
+                  Active session found for{" "}
+                  <strong style={{ color: "#ec4899" }}>{existingSessionEmail}</strong>
+                </div>
+                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <button
+                    type="button"
+                    className="auth-btn-primary"
+                    style={{ padding: "8px 14px", fontSize: "13px", width: "auto" }}
+                    onClick={async () => {
+                      const clerk = await getClerkClient();
+                      redirectToDashboard(clerk, existingSessionEmail);
+                    }}
+                  >
+                    Continue to Dashboard &rarr;
+                  </button>
+                  <button
+                    type="button"
+                    className="auth-link-pink"
+                    style={{ fontSize: "12px" }}
+                    onClick={async () => {
+                      setExistingSessionEmail(null);
+                      const clerk = await getClerkClient();
+                      if (clerk) {
+                        await clerk.signOut().catch(() => {});
+                      }
+                    }}
+                  >
+                    Switch account
+                  </button>
+                </div>
+              </div>
+            )}
 
             {authDeniedMessage && (
               <div className="auth-denial-alert" role="alert">
