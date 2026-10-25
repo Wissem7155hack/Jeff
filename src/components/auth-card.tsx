@@ -373,7 +373,7 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
         const resetFactor = factors.find(
           (f: any) => f.strategy === "reset_password_email_code"
         );
-        if (resetFactor) {
+        if (resetFactor && resetFactor.emailAddressId) {
           await clerk.client.signIn.prepareFirstFactor({
             strategy: "reset_password_email_code",
             emailAddressId: resetFactor.emailAddressId,
@@ -382,10 +382,10 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
           const init = await clerk.client.signIn.create({
             identifier: trimmedEmail,
           });
-          const initFactor = init.supportedFirstFactors?.find(
+          const initFactor = init?.supportedFirstFactors?.find(
             (f: any) => f.strategy === "reset_password_email_code"
           );
-          if (initFactor) {
+          if (initFactor && initFactor.emailAddressId) {
             await clerk.client.signIn.prepareFirstFactor({
               strategy: "reset_password_email_code",
               emailAddressId: initFactor.emailAddressId,
@@ -447,34 +447,17 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
         throw new Error("Authentication system failed to initialize. Please refresh.");
       }
 
-      let res: any;
-      try {
-        // Step A: Attempt first factor with reset code
-        const attemptRes = await clerk.client.signIn.attemptFirstFactor({
-          strategy: "reset_password_email_code",
-          code: code,
-        });
-
-        // Step B: Set new password
-        if (attemptRes.status === "needs_new_password" || attemptRes.status !== "complete") {
-          res = await clerk.client.signIn.resetPassword({
-            password: resetNewPassword,
-          });
-        } else {
-          res = attemptRes;
-        }
-      } catch (factorErr: any) {
-        // Fallback: direct attempt with password
-        try {
-          res = await clerk.client.signIn.attemptFirstFactor({
-            strategy: "reset_password_email_code",
-            code: code,
-            password: resetNewPassword,
-          });
-        } catch (pwErr) {
-          throw factorErr;
-        }
+      // Check active signIn session
+      if (!clerk.client.signIn || !clerk.client.signIn.id) {
+        throw new Error("Reset session expired. Please click 'Resend code' below to get a fresh code.");
       }
+
+      // Single official Clerk attemptFirstFactor call with strategy, code AND new password
+      const res = await clerk.client.signIn.attemptFirstFactor({
+        strategy: "reset_password_email_code",
+        code: code,
+        password: resetNewPassword,
+      });
 
       if (res && res.status === "complete") {
         await clerk.setActive({ session: res.createdSessionId });
@@ -497,37 +480,91 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
       }
     } catch (err: any) {
       setResetLoading(false);
-      const errMsg =
+      const errCode = err?.errors?.[0]?.code;
+      const rawMsg =
         err?.errors?.[0]?.longMessage ||
         err?.errors?.[0]?.message ||
         err?.message ||
-        "Failed to update password. Please verify the 6-digit code or choose a stronger password.";
-      setResetErrors({ form: errMsg });
+        "";
+
+      let userMsg = rawMsg;
+      if (
+        errCode === "verification_expired" ||
+        rawMsg.toLowerCase().includes("expired")
+      ) {
+        userMsg = "Verification code has expired. Please click 'Resend code' below to receive a new code.";
+      } else if (
+        errCode === "form_code_incorrect" ||
+        rawMsg.toLowerCase().includes("incorrect") ||
+        rawMsg.toLowerCase().includes("invalid code")
+      ) {
+        userMsg = "Incorrect 6-digit code. Please verify the code in your email and try again.";
+      } else if (
+        errCode === "client_state_invalid" ||
+        rawMsg.toLowerCase().includes("verification code before attempting")
+      ) {
+        userMsg = "Your reset session was interrupted. Please click 'Resend code' below to send a fresh code.";
+      } else if (
+        errCode === "form_password_pwned" ||
+        rawMsg.toLowerCase().includes("breach")
+      ) {
+        userMsg = "This password was flagged in an online data breach for account safety. Please choose a different, secure password.";
+      } else if (
+        errCode === "form_password_length_too_short" ||
+        rawMsg.toLowerCase().includes("at least 8")
+      ) {
+        userMsg = "Password must be at least 8 characters.";
+      } else if (!userMsg) {
+        userMsg = "Failed to update password. Please verify the 6-digit code or choose a stronger password.";
+      }
+
+      setResetErrors({ form: userMsg });
     }
   }
 
   async function handleResendResetCode() {
     setResetMessage("");
+    setResetLoading(true);
+    setResetErrors({});
     try {
       const clerk: any = await getClerkClient();
+      if (!clerk) throw new Error("Authentication system failed to initialize.");
+      const trimmedEmail = resetEmail.trim();
+
+      let prepared = false;
       const factors = clerk?.client?.signIn?.supportedFirstFactors || [];
       const resetFactor = factors.find(
         (f: any) => f.strategy === "reset_password_email_code"
       );
-      if (resetFactor) {
-        await clerk.client.signIn.prepareFirstFactor({
+      if (resetFactor && resetFactor.emailAddressId) {
+        try {
+          await clerk.client.signIn.prepareFirstFactor({
+            strategy: "reset_password_email_code",
+            emailAddressId: resetFactor.emailAddressId,
+          });
+          prepared = true;
+        } catch (prepErr) {
+          console.warn("prepareFirstFactor on resend failed, recreating signIn:", prepErr);
+        }
+      }
+
+      if (!prepared) {
+        await clerk.client.signIn.create({
           strategy: "reset_password_email_code",
-          emailAddressId: resetFactor.emailAddressId,
-        });
-      } else {
-        await clerk.client.signIn.prepareFirstFactor({
-          strategy: "reset_password_email_code",
+          identifier: trimmedEmail,
         });
       }
-      setResetMessage(`A new verification code was sent to ${resetEmail.trim()}.`);
+
+      setResetMessage(`A fresh verification code was sent to ${trimmedEmail}.`);
     } catch (err: any) {
-      const errMsg = err?.errors?.[0]?.message || "Failed to resend code. Please wait a moment and try again.";
+      const errMsg =
+        err?.errors?.[0]?.longMessage ||
+        err?.errors?.[0]?.message ||
+        err?.message ||
+        "Failed to resend code. Please wait a moment and try again.";
       setResetErrors({ form: errMsg });
+    } finally {
+      setResetLoading(false);
     }
   }
 
