@@ -425,8 +425,8 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
 
     if (!resetNewPassword) {
       errs.password = "New password is required";
-    } else if (resetNewPassword.length < 8) {
-      errs.password = "Password must be at least 8 characters";
+    } else if (resetNewPassword.length < 15) {
+      errs.password = "Password must be at least 15 characters";
     }
 
     if (resetNewPassword !== resetConfirmPassword) {
@@ -509,11 +509,8 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
         rawMsg.toLowerCase().includes("breach")
       ) {
         userMsg = "This password was flagged in an online data breach for account safety. Please choose a different, secure password.";
-      } else if (
-        errCode === "form_password_length_too_short" ||
-        rawMsg.toLowerCase().includes("at least 8")
-      ) {
-        userMsg = "Password must be at least 8 characters.";
+      } else if (errCode === "form_password_length_too_short") {
+        userMsg = rawMsg || "Password must be at least 15 characters.";
       } else if (!userMsg) {
         userMsg = "Failed to update password. Please verify the 6-digit code or choose a stronger password.";
       }
@@ -593,8 +590,8 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
 
     if (!signUpPassword) {
       errs.password = "Password is required";
-    } else if (signUpPassword.length < 8) {
-      errs.password = "Password must be at least 8 characters";
+    } else if (signUpPassword.length < 15) {
+      errs.password = "Password must be at least 15 characters";
     }
 
     if (Object.keys(errs).length > 0) {
@@ -862,7 +859,7 @@ export function AuthCard({ initialMode = "signin" }: AuthCardProps) {
                   <input
                     id="reset-new-password"
                     type={showResetPassword ? "text" : "password"}
-                    placeholder="Minimum 8 characters"
+                    placeholder="Minimum 15 characters"
                     autoComplete="new-password"
                     value={resetNewPassword}
                     onChange={(e) => {
